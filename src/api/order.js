@@ -1,34 +1,63 @@
-import request from "@/utils/request"
-
-export function getTotal(params) {
-    return request({
-        url: "order/index",
-        method: "get",
-        params
-    })
+import request from '@/utils/request'
+export function fetchList(params) {
+  return request({
+    url:'/order/list',
+    method:'get',
+    params:params
+  })
 }
 
-export function getOrderDetail(params) {
-    return request({
-        url: "order/getOrderDetail",
-        method: "get",
-        params
-    })
+export function closeOrder(params) {
+  return request({
+    url:'/order/update/close',
+    method:'post',
+    params:params
+  })
 }
 
-export function sendGoods(data) {
-    return request({
-        url: "order/sendGoods",
-        method: "post",
-        data
-    })
+export function deleteOrder(params) {
+  return request({
+    url:'/order/delete',
+    method:'post',
+    params:params
+  })
 }
 
-export function selfPickedUp(data) {
-    return request({
-        url: "order/selfPickedUp",
-        method: "post",
-        data
-    })
+export function deliveryOrder(data) {
+  return request({
+    url:'/order/update/delivery',
+    method:'post',
+    data:data
+  });
 }
 
+export function getOrderDetail(id) {
+  return request({
+    url:'/order/'+id,
+    method:'get'
+  });
+}
+
+export function updateReceiverInfo(data) {
+  return request({
+    url:'/order/update/receiverInfo',
+    method:'post',
+    data:data
+  });
+}
+
+export function updateMoneyInfo(data) {
+  return request({
+    url:'/order/update/moneyInfo',
+    method:'post',
+    data:data
+  });
+}
+
+export function updateOrderNote(params) {
+  return request({
+    url:'/order/update/note',
+    method:'post',
+    params:params
+  })
+}

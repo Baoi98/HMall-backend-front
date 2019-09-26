@@ -12,29 +12,22 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api':{
-        target: 'http://localhost/web/public/vueapi',
-          changeOrigin: true,
-          pathRewrite: {
-            '^/api':'/'
-          }
+        target: 'http://127.0.0.1:9000/',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api':'/api'
+        }
       }
     },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
-    port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    port: 8090, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
 
-    // Use Eslint Loader?
-    // If true, your code will be linted during bundling and
-    // linting errors and warnings will be shown in the console.
-    useEslint: true,
-    // If true, eslint errors and warnings will also be shown in the error overlay
-    // in the browser.
-    showEslintErrorsInOverlay: false,
 
     /**
      * Source Maps
@@ -53,18 +46,18 @@ module.exports = {
 
   build: {
     // Template for index.html
-    index: path.resolve(__dirname, '../root/index.html'),
+    index: path.resolve(__dirname, '../dist/index.html'),
 
     // Paths
-    assetsRoot: path.resolve(__dirname, '../root'),
+    assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: './',
+    assetsPublicPath: '/',
 
     /**
      * Source Maps
      */
 
-    productionSourceMap: false,
+    productionSourceMap: true,
     // https://webpack.js.org/configuration/devtool/#production
     devtool: '#source-map',
 
