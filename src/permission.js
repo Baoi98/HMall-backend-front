@@ -15,7 +15,8 @@ router.beforeEach((to, from, next) => {
       NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
     } else {
       if (store.getters.roles.length === 0) {
-          store.dispatch('GetInfo').then(res => { // 拉取用户信息
+          const username = sessionStorage.getItem("admin")
+          store.dispatch('GetInfo',username).then(res => { // 拉取用户信息
           next()
         }).catch((err) => {
           store.dispatch('FedLogOut').then(() => {

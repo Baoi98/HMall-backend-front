@@ -34,9 +34,17 @@ service.interceptors.response.use(
         type: 'error',
         duration: 3 * 1000
       })
+      //没有权限，401
+      if(res.status === 401){
+        Message({
+          message: "您没有权限进行此操作",
+          type: 'warning',
+          duration: 3 * 1000
+        })
+      }
 
       // 401:未登录;
-      if (res.status === 401||res.status === 403) {
+      if (res.status === 403) {
         MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
           confirmButtonText: '重新登录',
           cancelButtonText: '取消',
@@ -55,7 +63,7 @@ service.interceptors.response.use(
   error => {
     console.log('err' + error)// for debug
     Message({
-      message: error.message,
+      message: "出现异常，请稍后再试",//error.message,
       type: 'error',
       duration: 3 * 1000
     })

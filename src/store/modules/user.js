@@ -32,6 +32,8 @@ const user = {
         login(username, userInfo.password).then(response => {
           const data = response.data
           const token = data.token
+          //存储用户名
+          sessionStorage.setItem("admin",username)
           setToken(token)
           commit('SET_TOKEN', token)
           resolve()
@@ -42,9 +44,9 @@ const user = {
     },
 
     // 获取用户信息
-    GetInfo({ commit, state }) {
+    GetInfo({ commit, state },username) {
       return new Promise((resolve, reject) => {
-        getInfo().then(response => {
+        getInfo(username).then(response => {
           const data = response.data
           if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
             commit('SET_ROLES', data.roles)
@@ -64,6 +66,8 @@ const user = {
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
         logout(state.token).then(() => {
+          //清空用户名
+          sessionStorage.clear()
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
           removeToken()
