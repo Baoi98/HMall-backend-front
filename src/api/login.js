@@ -13,8 +13,13 @@ export function login(username, password) {
 
 export function getInfo(username) {
   return request({
-    url: '/backend/admin/info?username=' + username,
+    url: '/backend/admin/info/'+username,
     method: 'get'
+    /*
+    params:{
+      username:username
+    }
+    */
   })
 }
 
