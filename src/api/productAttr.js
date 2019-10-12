@@ -1,23 +1,25 @@
 import request from '@/utils/request'
-export function fetchList(cid,params) {
+export function fetchList(cid,param) {
+  let type = param.type
+  let pageNum = param.pageNum
+  let pageSize = param.pageSize
   return request({
-    url:'/productAttribute/list/'+cid,
-    method:'get',
-    params:params
+    url:'/product/item/attribute/list/' + cid + '/' + type + '/' + pageNum + '/' + pageSize,
+    method:'get'
   })
 }
 
 export function deleteProductAttr(data) {
   return request({
-    url:'/productAttribute/delete',
-    method:'post',
+    url:'/product/item/attribute/delete',
+    method:'delete',
     data:data
   })
 }
 
 export function createProductAttr(data) {
   return request({
-    url:'/productAttribute/create',
+    url:'/product/item/attribute/create',
     method:'post',
     data:data
   })
@@ -25,21 +27,22 @@ export function createProductAttr(data) {
 
 export function updateProductAttr(id,data) {
   return request({
-    url:'/productAttribute/update/'+id,
-    method:'post',
+    url:'/product/item/attribute/update/' + id,
+    method:'put',
     data:data
   })
 }
+//查询商品属性
 export function getProductAttr(id) {
   return request({
-    url:'/productAttribute/'+id,
+    url:'/product/item/attribute/'+id,
     method:'get'
   })
 }
 
 export function getProductAttrInfo(productCategoryId) {
   return request({
-    url:'/productAttribute/attrInfo/'+productCategoryId,
+    url:'/product/item/attribute/attrInfo/' + productCategoryId,
     method:'get'
   })
 }

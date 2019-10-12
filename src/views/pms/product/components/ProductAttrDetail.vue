@@ -101,15 +101,6 @@
           @click="handleSyncProductSkuPrice">同步价格
         </el-button>
       </el-form-item>
-      <el-form-item label="属性图片：" v-if="hasAttrPic">
-        <el-card shadow="never" class="cardBg">
-          <div v-for="(item,index) in selectProductAttrPics">
-            <span>{{item.name}}:</span>
-            <single-upload v-model="item.pic"
-                           style="width: 300px;display: inline-block;margin-left: 10px"></single-upload>
-          </div>
-        </el-card>
-      </el-form-item>
       <el-form-item label="商品参数：">
         <el-card shadow="never" class="cardBg">
           <div v-for="(item,index) in selectProductParam" :class="{littleMarginTop:index!==0}">
@@ -134,14 +125,11 @@
           <el-tab-pane label="电脑端详情" name="pc">
             <tinymce :width="595" :height="300" v-model="value.detailHtml"></tinymce>
           </el-tab-pane>
-          <el-tab-pane label="移动端详情" name="mobile">
-            <tinymce :width="595" :height="300" v-model="value.detailMobileHtml"></tinymce>
-          </el-tab-pane>
         </el-tabs>
       </el-form-item>
       <el-form-item style="text-align: center">
         <el-button size="medium" @click="handlePrev">上一步，填写商品促销</el-button>
-        <el-button type="primary" size="medium" @click="handleNext">下一步，选择商品关联</el-button>
+        <el-button type="primary" size="medium" @click="handleFinishCommit">完成，提交商品</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -150,13 +138,12 @@
 <script>
   import {fetchList as fetchProductAttrCateList} from '@/api/productAttrCate'
   import {fetchList as fetchProductAttrList} from '@/api/productAttr'
-  import SingleUpload from '@/components/Upload/singleUpload'
   import MultiUpload from '@/components/Upload/multiUpload'
   import Tinymce from '@/components/Tinymce'
 
   export default {
     name: "ProductAttrDetail",
-    components: {SingleUpload, MultiUpload, Tinymce},
+    components: { MultiUpload, Tinymce},
     props: {
       value: Object,
       isEdit: {
@@ -249,20 +236,20 @@
         }
         this.hasEditCreated=true;
       },
+      //商品属性分类集合
       getProductAttrCateList() {
-        let param = {pageNum: 1, pageSize: 100};
-        fetchProductAttrCateList(param).then(response => {
+        fetchProductAttrCateList().then(response => {
           this.productAttributeCategoryOptions = [];
-          let list = response.data.list;
+          let list = response.data;
           for (let i = 0; i < list.length; i++) {
             this.productAttributeCategoryOptions.push({label: list[i].name, value: list[i].id});
           }
         });
       },
+      //商品属性集合
       getProductAttrList(type, cid) {
-        let param = {pageNum: 1, pageSize: 100, type: type};
-        fetchProductAttrList(cid, param).then(response => {
-          let list = response.data.list;
+        fetchProductAttrList(cid, {type:type}).then(response => {
+          let list = response.data;
           if (type === 0) {
             this.selectProductAttr = [];
             for (let i = 0; i < list.length; i++) {
@@ -561,6 +548,11 @@
         this.mergeProductAttrValue();
         this.mergeProductAttrPics();
         this.$emit('nextStep')
+      },
+      handleFinishCommit(){
+        this.mergeProductAttrValue();
+        this.mergeProductAttrPics();
+        this.$emit('finishCommit',this.isEdit);
       }
     }
   }

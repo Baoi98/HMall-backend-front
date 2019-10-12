@@ -4,7 +4,6 @@
       <el-step title="填写商品信息"></el-step>
       <el-step title="填写商品促销"></el-step>
       <el-step title="填写商品属性"></el-step>
-      <el-step title="选择商品关联"></el-step>
     </el-steps>
     <product-info-detail
       v-show="showStatus[0]"
@@ -23,16 +22,9 @@
       v-show="showStatus[2]"
       v-model="productParam"
       :is-edit="isEdit"
-      @nextStep="nextStep"
-      @prevStep="prevStep">
-    </product-attr-detail>
-    <product-relation-detail
-      v-show="showStatus[3]"
-      v-model="productParam"
-      :is-edit="isEdit"
       @prevStep="prevStep"
       @finishCommit="finishCommit">
-    </product-relation-detail>
+    </product-attr-detail>
   </el-card>
 </template>
 <script>
@@ -66,12 +58,6 @@
     note: '',
     originalPrice: 0,
     pic: '',
-    //会员价格{memberLevelId: 0,memberPrice: 0,memberLevelName: null}
-    memberPriceList: [],
-    //商品满减
-    productFullReductionList: [{fullPrice: 0, reducePrice: 0}],
-    //商品阶梯价格
-    productLadderList: [{count: 0,discount: 0,price: 0}],
     previewStatus: 0,
     price: 0,
     productAttributeCategoryId: null,
@@ -79,10 +65,6 @@
     productAttributeValueList: [],
     //商品sku库存信息{lowStock: 0, pic: '', price: 0, sale: 0, skuCode: '', sp1: '', sp2: '', sp3: '', stock: 0}
     skuStockList: [],
-    //商品相关专题{subjectId: 0}
-    subjectProductRelationList: [],
-    //商品相关优选{prefrenceAreaId: 0}
-    prefrenceAreaProductRelationList: [],
     productCategoryId: null,
     productCategoryName: '',
     productSn: '',
@@ -105,7 +87,7 @@
   };
   export default {
     name: 'ProductDetail',
-    components: {ProductInfoDetail, ProductSaleDetail, ProductAttrDetail, ProductRelationDetail},
+    components: {ProductInfoDetail, ProductSaleDetail, ProductAttrDetail},
     props: {
       isEdit: {
         type: Boolean,

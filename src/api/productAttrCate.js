@@ -1,37 +1,36 @@
 import request from '@/utils/request'
-export function fetchList(params) {
+export function fetchList(param) {
+  let pageSize = param.pageSize;
+  let pageNum = param.pageNum;
   return request({
-    url:'/productAttribute/category/list',
-    method:'get',
-    params:params
+    url:'/product/item/attribute/category/list/' + pageNum + '/' + pageSize,
+    method:'get'
   })
 }
 
-export function createProductAttrCate(data) {
+export function createProductAttrCate(name) {
   return request({
-    url:'/productAttribute/category/create',
-    method:'post',
-    data:data
+    url:'/product/item/attribute/category/create/' + name,
+    method:'post'
   })
 }
 
 export function deleteProductAttrCate(id) {
   return request({
-    url:'/productAttribute/category/delete/'+id,
-    method:'get'
+    url:'/product/item/attribute/category/delete/' + id,
+    method:'delete'
   })
 }
 
-export function updateProductAttrCate(id,data) {
+export function updateProductAttrCate(id,name) {
   return request({
-    url:'/productAttribute/category/update/'+id,
-    method:'post',
-    data:data
+    url:'/product/item/attribute/category/update/' + id + '/' + name,
+    method:'put'
   })
 }
 export function fetchListWithAttr() {
   return request({
-    url:'/productAttribute/category/list/withAttr',
+    url:'/product/item/attribute/category/list/withAttr',
     method:'get'
   })
 }

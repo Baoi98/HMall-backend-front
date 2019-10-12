@@ -14,23 +14,11 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="分类筛选样式:">
-        <el-radio-group v-model="productAttr.filterType">
-          <el-radio :label="0">普通</el-radio>
-          <el-radio :label="1">颜色</el-radio>
-        </el-radio-group>
-      </el-form-item>
       <el-form-item label="能否进行检索:">
         <el-radio-group v-model="productAttr.searchType">
           <el-radio :label="0">不需要检索</el-radio>
           <el-radio :label="1">关键字检索</el-radio>
           <el-radio :label="2">范围检索</el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="商品属性关联:">
-        <el-radio-group v-model="productAttr.relatedStatus">
-          <el-radio :label="1">是</el-radio>
-          <el-radio :label="0">否</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="属性是否可选:">
@@ -71,13 +59,11 @@
   import {createProductAttr,getProductAttr,updateProductAttr} from '@/api/productAttr'
 
   const defaultProductAttr = {
-    filterType: 0,
     handAddStatus: 0,
     inputList: '',
     inputType: 0,
     name: '',
     productAttributeCategoryId: 0,
-    relatedStatus: 0,
     searchType: 0,
     selectType: 0,
     sort: 0,
@@ -157,7 +143,8 @@
                     type: 'success',
                     duration: 1000
                   });
-                  this.resetForm('productAttrFrom');
+                  this.$router.back();
+                  //this.resetForm('productAttrFrom');
                 });
               }
             });

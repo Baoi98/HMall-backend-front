@@ -163,13 +163,14 @@
       getParamList(index, row) {
         this.$router.push({path: '/pms/productAttrList',query:{cid:row.id,cname:row.name,type:1}})
       },
+      //创建商品类型
       handleConfirm(formName){
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            let data = new URLSearchParams();
-            data.append("name",this.productAttrCate.name);
+            /*let data = new URLSearchParams();
+            data.append("name",this.productAttrCate.name);*/
             if(this.dialogTitle==="添加类型"){
-              createProductAttrCate(data).then(response=>{
+              createProductAttrCate(this.productAttrCate.name).then(response=>{
                 this.$message({
                   message: '添加成功',
                   type: 'success',
@@ -179,7 +180,7 @@
                 this.getList();
               });
             }else{
-              updateProductAttrCate(this.productAttrCate.id,data).then(response=>{
+              updateProductAttrCate(this.productAttrCate.id,this.productAttrCate.name).then(response=>{
                 this.$message({
                   message: '修改成功',
                   type: 'success',

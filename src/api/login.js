@@ -15,11 +15,6 @@ export function getInfo(username) {
   return request({
     url: '/backend/admin/info/'+username,
     method: 'get'
-    /*
-    params:{
-      username:username
-    }
-    */
   })
 }
 

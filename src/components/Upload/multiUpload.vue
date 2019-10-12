@@ -1,14 +1,16 @@
 <template> 
   <div>
     <el-upload
-      action="http://macro-oss.oss-cn-shenzhen.aliyuncs.com"
-      :data="dataObj"
+      :action = url
+      :data = "dataObj"
+      accept="image/jpeg,image/png"
       list-type="picture-card"
       :file-list="fileList"
-      :before-upload="beforeUpload"
-      :on-remove="handleRemove"
       :on-success="handleUploadSuccess"
+      :on-remove="handleRemove"
       :on-preview="handlePreview"
+      name="multipartFile"
+      multiple
       :limit="maxCount"
       :on-exceed="handleExceed"
     >
@@ -20,8 +22,6 @@
   </div>
 </template>
 <script>
-  import {policy} from '@/api/oss'
-
   export default {
     name: 'multiUpload',
     props: {
@@ -36,15 +36,11 @@
     data() {
       return {
         dataObj: {
-          policy: '',
-          signature: '',
-          key: '',
-          ossaccessKeyId: '',
-          dir: '',
-          host: ''
+          url:''
         },
         dialogVisible: false,
-        dialogImageUrl:null
+        dialogImageUrl:null,
+        url:"http://127.0.0.1:10001/item/photo/upload"
       };
     },
     computed: {
@@ -65,32 +61,27 @@
         this.$emit('input', value)
       },
       handleRemove(file, fileList) {
-        this.emitInput(fileList);
+          this.emitInput(fileList);
       },
       handlePreview(file) {
         this.dialogVisible = true;
-        this.dialogImageUrl=file.url;
+        this.dialogImageUrl = file.url;
       },
-      beforeUpload(file) {
-        let _self = this;
-        return new Promise((resolve, reject) => {
-          policy().then(response => {
-            _self.dataObj.policy = response.data.policy;
-            _self.dataObj.signature = response.data.signature;
-            _self.dataObj.ossaccessKeyId = response.data.accessKeyId;
-            _self.dataObj.key = response.data.dir + '/${filename}';
-            _self.dataObj.dir = response.data.dir;
-            _self.dataObj.host = response.data.host;
-            resolve(true)
-          }).catch(err => {
-            console.log(err)
-            reject(false)
-          })
-        })
-      },
-      handleUploadSuccess(res, file) {
-        this.fileList.push({url: file.name,url:this.dataObj.host + '/' + this.dataObj.dir + '/' + file.name});
-        this.emitInput(this.fileList);
+      //上传成功，回调方法 response 包含参数
+      handleUploadSuccess(response, file) {
+        let path = response.data
+        if(path == null){
+            this.$message({
+                message: response.message,
+                type: 'warning',
+                duration:1000
+            });
+            console.log(this.fileList)
+        }
+        else if(path != null && path != ''){
+            this.fileList.push({name: file.name,url:path});
+            this.emitInput(this.fileList);
+        }
       },
       handleExceed(files, fileList) {
         this.$message({
@@ -102,8 +93,5 @@
     }
   }
 </script>
-<style>
-
-</style>
 
 

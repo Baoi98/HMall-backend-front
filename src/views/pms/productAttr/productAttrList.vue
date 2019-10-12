@@ -3,13 +3,42 @@
     <el-card class="operate-container" shadow="never">
 
       <i class="el-icon-tickets" style="margin-top: 5px"></i>
-      <span style="margin-top: 5px">数据列表</span>
+      <span style="margin-top: 5px">批量操作</span>
+      <div class="batch-operate-container">
+        <el-select
+          size="small"
+          v-model="operateType" placeholder="批量操作">
+          <el-option
+            v-for="item in operates"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+        <el-button
+          style="margin-left: 20px"
+          class="search-button"
+          @click="handleBatchOperate()"
+          type="primary"
+          size="small">
+          确定
+        </el-button>
+      </div>
       <el-button
+        style="margin-top: 12px"
+        class="btn-add"
+        @click="returnHistory()"
+        size="small">
+        返回
+      </el-button>
+      <el-button
+        style="margin-top: 12px"
         class="btn-add"
         @click="addProductAttr()"
-        size="mini">
+        size="small">
         添加
       </el-button>
+
     </el-card>
     <div class="table-container">
       <el-table ref="productAttrTable"
@@ -54,26 +83,6 @@
           </template>
         </el-table-column>
       </el-table>
-    </div>
-    <div class="batch-operate-container">
-      <el-select
-        size="small"
-        v-model="operateType" placeholder="批量操作">
-        <el-option
-          v-for="item in operates"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
-      <el-button
-        style="margin-left: 20px"
-        class="search-button"
-        @click="handleBatchOperate()"
-        type="primary"
-        size="small">
-        确定
-      </el-button>
     </div>
     <div class="pagination-container">
       <el-pagination
@@ -190,6 +199,9 @@
         ids.push(row.id);
         this.handleDeleteProductAttr(ids);
       },
+      returnHistory(){
+          this.$router.back();
+      }
     },
     filters: {
       inputTypeFilter(value) {

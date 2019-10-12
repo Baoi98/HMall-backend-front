@@ -36,9 +36,6 @@
           <el-radio :label="0">否</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="分类图标：">
-        <single-upload v-model="productCate.icon"></single-upload>
-      </el-form-item>
       <el-form-item v-for="(filterProductAttr, index) in filterProductAttrList"
                     :label="index | filterLabelFilter"
                     :key="filterProductAttr.key"
@@ -71,7 +68,6 @@
   import {fetchList, createProductCate, updateProductCate, getProductCate} from '@/api/productCate';
   import {fetchListWithAttr} from '@/api/productAttrCate';
   import {getProductAttrInfo} from '@/api/productAttr';
-  import SingleUpload from '@/components/Upload/singleUpload';
 
   const defaultProductCate = {
     description: '',
@@ -87,7 +83,6 @@
   };
   export default {
     name: "ProductCateDetail",
-    components: {SingleUpload},
     props: {
       isEdit: {
         type: Boolean,
@@ -116,6 +111,7 @@
           this.productCate = response.data;
         });
         getProductAttrInfo(this.$route.query.id).then(response => {
+          console.log(response)
           if (response.data != null && response.data.length > 0) {
             this.filterProductAttrList = [];
             for (let i = 0; i < response.data.length; i++) {

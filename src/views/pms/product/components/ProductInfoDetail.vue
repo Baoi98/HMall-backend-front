@@ -132,6 +132,7 @@
         }
         this.hasEditCreated=true;
       },
+      //获取商品分类集合
       getProductCateList() {
         fetchListWithChildren().then(response => {
           let list = response.data;
@@ -147,15 +148,17 @@
           }
         });
       },
+      //商品品牌
       getBrandList() {
-        fetchBrandList({pageNum: 1, pageSize: 100}).then(response => {
+        fetchBrandList().then(response => {
           this.brandOptions = [];
-          let brandList = response.data.list;
+          let brandList = response.data;
           for (let i = 0; i < brandList.length; i++) {
             this.brandOptions.push({label: brandList[i].name, value: brandList[i].id});
           }
         });
       },
+      //分类名称
       getCateNameById(id){
         let name=null;
         for(let i=0;i<this.productCateOptions.length;i++){

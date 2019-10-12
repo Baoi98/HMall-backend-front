@@ -1,9 +1,9 @@
 import request from '@/utils/request'
 export function fetchList(parentId,params) {
   return request({
-    url:'/productCategory/list/'+parentId,
+    url:'/product/item/category/list/' + parentId,
     method:'get',
-    params:params
+    params : params
   })
 }
 export function deleteProductCate(id) {
@@ -20,41 +20,39 @@ export function createProductCate(data) {
     data:data
   })
 }
-
+//更新商品分类
 export function updateProductCate(id,data) {
   return request({
-    url:'/productCategory/update/'+id,
-    method:'post',
+    url:'/product/item/category/update/'+id,
+    method:'put',
     data:data
   })
 }
-
+//获取商品分类
 export function getProductCate(id) {
   return request({
-    url:'/productCategory/'+id,
+    url:'/product/item/category/' + id,
     method:'get',
   })
 }
-
-export function updateShowStatus(data) {
+//更新分类显示状态
+export function updateShowStatus(ids,showStatus) {
   return request({
-    url:'/productCategory/update/showStatus',
-    method:'post',
-    data:data
+    url:'/product/item/category/update/showStatus/' + ids + '/' + showStatus,
+    method:'put'
   })
 }
-
-export function updateNavStatus(data) {
+//更新分类导航栏显示状态
+export function updateNavStatus(ids,navStatus) {
   return request({
-    url:'/productCategory/update/navStatus',
-    method:'post',
-    data:data
+    url:'/product/item/category/update/navStatus/' + ids + '/' + navStatus,
+    method:'put'
   })
 }
 
 export function fetchListWithChildren() {
   return request({
-    url:'/productCategory/list/withChildren',
+    url:'/product/item/category/list',
     method:'get'
   })
 }

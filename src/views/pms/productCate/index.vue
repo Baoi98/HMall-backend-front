@@ -5,8 +5,14 @@
       <span style="margin-top: 5px">数据列表</span>
       <el-button
         class="btn-add"
+        @click="returnHistory()"
+        size="small">
+        返回
+      </el-button>
+      <el-button
+        class="btn-add"
         @click="handleAddProductCate()"
-        size="mini">
+        size="small">
         添加
       </el-button>
     </el-card>
@@ -59,10 +65,6 @@
               size="mini"
               :disabled="scope.row.level | disableNextLevel"
               @click="handleShowNextLevel(scope.$index, scope.row)">查看下级
-            </el-button>
-            <el-button
-              size="mini"
-              @click="handleTransferProduct(scope.$index, scope.row)">转移商品
             </el-button>
           </template>
         </el-table-column>
@@ -151,13 +153,11 @@
         this.listQuery.pageNum = val;
         this.getList();
       },
+      //更新分类导航栏显示状态
       handleNavStatusChange(index, row) {
-        let data = new URLSearchParams();
         let ids=[];
         ids.push(row.id)
-        data.append('ids',ids);
-        data.append('navStatus',row.navStatus);
-        updateNavStatus(data).then(response=>{
+        updateNavStatus(ids,row.navStatus).then(response=>{
           this.$message({
             message: '修改成功',
             type: 'success',
@@ -165,13 +165,11 @@
           });
         });
       },
+      //更新分类显示状态
       handleShowStatusChange(index, row) {
-        let data = new URLSearchParams();
         let ids=[];
         ids.push(row.id)
-        data.append('ids',ids);
-        data.append('showStatus',row.showStatus);
-        updateShowStatus(data).then(response=>{
+        updateShowStatus(ids,row.showStatus).then(response=>{
           this.$message({
             message: '修改成功',
             type: 'success',
@@ -181,9 +179,6 @@
       },
       handleShowNextLevel(index, row) {
         this.$router.push({path: '/pms/productCate', query: {parentId: row.id}})
-      },
-      handleTransferProduct(index, row) {
-        console.log('handleAddProductCate');
       },
       handleUpdate(index, row) {
         this.$router.push({path:'/pms/updateProductCate',query:{id:row.id}});
@@ -203,6 +198,9 @@
             this.getList();
           });
         });
+      },
+      returnHistory(){
+          this.$router.back();
       }
     },
     filters: {

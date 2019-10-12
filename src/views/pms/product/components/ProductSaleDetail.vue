@@ -1,7 +1,7 @@
 <template>
   <div style="margin-top: 50px">
     <el-form :model="value" ref="productSaleForm" label-width="120px" style="width: 600px" size="small">
-      <el-form-item label="赠送积分：">
+      <!--<el-form-item label="赠送积分：">
         <el-input v-model="value.giftPoint"></el-input>
       </el-form-item>
       <el-form-item label="赠送成长值：">
@@ -9,7 +9,7 @@
       </el-form-item>
       <el-form-item label="积分购买限制：">
         <el-input v-model="value.usePointLimit"></el-input>
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item label="预告商品：">
         <el-switch
           v-model="value.previewStatus"
@@ -61,9 +61,9 @@
         <el-radio-group v-model="value.promotionType" size="small">
           <el-radio-button :label="0">无优惠</el-radio-button>
           <el-radio-button :label="1">特惠促销</el-radio-button>
-          <el-radio-button :label="2">会员价格</el-radio-button>
+          <!--<el-radio-button :label="2">会员价格</el-radio-button>
           <el-radio-button :label="3">阶梯价格</el-radio-button>
-          <el-radio-button :label="4">满减价格</el-radio-button>
+          <el-radio-button :label="4">满减价格</el-radio-button>-->
         </el-radio-group>
       </el-form-item>
       <el-form-item v-show="value.promotionType===1">
@@ -91,9 +91,8 @@
           促销价格：
           <el-input style="width: 220px" v-model="value.promotionPrice" placeholder="输入促销价格"></el-input>
         </div>
-
       </el-form-item>
-      <el-form-item v-show="value.promotionType===2">
+      <!--<el-form-item v-show="value.promotionType===2">
         <div v-for="(item, index) in value.memberPriceList" :class="{littleMargin:index!==0}">
           {{item.memberLevelName}}：
           <el-input v-model="item.memberPrice" style="width: 200px"></el-input>
@@ -156,7 +155,7 @@
             </template>
           </el-table-column>
         </el-table>
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item style="text-align: center">
         <el-button size="medium" @click="handlePrev">上一步，填写商品信息</el-button>
         <el-button type="primary" size="medium" @click="handleNext">下一步，填写商品属性</el-button>

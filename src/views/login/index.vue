@@ -11,7 +11,7 @@
         <div style="text-align: center">
           <svg-icon icon-class="login-mall" style="width: 56px;height: 56px;color: white;margin-bottom: 30px;"></svg-icon>
         </div>
-        <h3 class="title">HMall商城管理系统</h3>
+        <h3 class="title">极客商城管理系统</h3>
         <el-form-item prop="username">
           <span class="svg-container svg-container_login">
             <svg-icon icon-class="user"></svg-icon>
@@ -47,6 +47,7 @@
         </el-form-item>
       </el-form>
     </el-card>
+
     <img :src="login_center_bg" class="login-center-layout">
 
   </div>

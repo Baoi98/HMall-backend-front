@@ -5,11 +5,12 @@
     </el-button>
     <el-dialog append-to-body :visible.sync="dialogVisible">
       <el-upload class="editor-slide-upload"
-                 action="http://macro-oss.oss-cn-shenzhen.aliyuncs.com"
+                 action=""
                  :data="dataObj"
                  :multiple="true"
                  :file-list="fileList"
                  :show-file-list="true"
+                 name="multipartFile"
                  list-type="picture-card"
                  :on-remove="handleRemove"
                  :on-success="handleSuccess"
@@ -90,7 +91,7 @@
         const fileName = file.uid;
         this.listObj[fileName] = {};
         return new Promise((resolve, reject) => {
-          policy().then(response => {
+          policy(file).then(response => {
             _self.dataObj.policy = response.data.policy;
             _self.dataObj.signature = response.data.signature;
             _self.dataObj.ossaccessKeyId = response.data.accessKeyId;

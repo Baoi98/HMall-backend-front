@@ -68,13 +68,35 @@
     </el-card>
     <el-card class="operate-container" shadow="never">
       <i class="el-icon-tickets"></i>
-      <span>数据列表</span>
+      <span>批量操作</span>
+      <div class="batch-operate-container">
+        <el-select
+          size="small"
+          v-model="operateType" placeholder="批量操作">
+          <el-option
+            v-for="item in operates"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+        <el-button
+          style="margin-left: 20px"
+          class="search-button"
+          @click="handleBatchOperate()"
+          type="primary"
+          size="small">
+          确定
+        </el-button>
+      </div>
+
       <el-button
         class="btn-add"
         @click="handleAddProduct()"
-        size="mini">
-        添加
+        size="small">
+        添加商品
       </el-button>
+
     </el-card>
     <div class="table-container">
       <el-table ref="productTable"
@@ -179,26 +201,6 @@
         </el-table-column>
       </el-table>
     </div>
-    <div class="batch-operate-container">
-      <el-select
-        size="small"
-        v-model="operateType" placeholder="批量操作">
-        <el-option
-          v-for="item in operates"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
-      <el-button
-        style="margin-left: 20px"
-        class="search-button"
-        @click="handleBatchOperate()"
-        type="primary"
-        size="small">
-        确定
-      </el-button>
-    </div>
     <div class="pagination-container">
       <el-pagination
         background
@@ -283,7 +285,7 @@
   import {fetchList as fetchProductAttrList} from '@/api/productAttr'
   import {fetchList as fetchBrandList} from '@/api/brand'
   import {fetchListWithChildren} from '@/api/productCate'
-
+  //商品搜索参数
   const defaultListQuery = {
     keyword: null,
     pageNum: 1,
@@ -331,14 +333,6 @@
           {
             label: "取消新品",
             value: "newOff"
-          },
-          {
-            label: "转移到分类",
-            value: "transferCategory"
-          },
-          {
-            label: "移入回收站",
-            value: "recycle"
           }
         ],
         operateType: null,
@@ -409,9 +403,9 @@
         });
       },
       getBrandList() {
-        fetchBrandList({pageNum: 1, pageSize: 100}).then(response => {
+        fetchBrandList().then(response => {
           this.brandOptions = [];
-          let brandList = response.data.list;
+          let brandList = response.data;
           for (let i = 0; i < brandList.length; i++) {
             this.brandOptions.push({label: brandList[i].name, value: brandList[i].id});
           }
@@ -438,11 +432,13 @@
         this.editSkuInfo.productSn=row.productSn;
         this.editSkuInfo.productAttributeCategoryId = row.productAttributeCategoryId;
         this.editSkuInfo.keyword=null;
+        //获取sku集合
         fetchSkuStockList(row.id,{keyword:this.editSkuInfo.keyword}).then(response=>{
           this.editSkuInfo.stockList=response.data;
         });
+        //获取商品sku属性
         fetchProductAttrList(row.productAttributeCategoryId,{type:0}).then(response=>{
-          this.editSkuInfo.productAttr=response.data.list;
+          this.editSkuInfo.productAttr=response.data;
         });
       },
       handleSearchEditSku(){
@@ -591,6 +587,7 @@
       handleShowLog(index,row){
         console.log("handleShowLog",row);
       },
+      //更新商品上下架状态
       updatePublishStatus(publishStatus, ids) {
         let params = new URLSearchParams();
         params.append('ids', ids);
@@ -599,7 +596,7 @@
           this.$message({
             message: '修改成功',
             type: 'success',
-            duration: 1000
+            duration: 1500
           });
         });
       },
