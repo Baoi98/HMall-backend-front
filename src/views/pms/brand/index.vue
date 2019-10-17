@@ -46,9 +46,10 @@
         </el-button>
       </div>
       <el-button
+        style="margin-top: 12px"
         class="btn-add"
         @click="addBrand()"
-        size="mini">
+        size="small">
         添加
       </el-button>
     </el-card>
@@ -62,6 +63,9 @@
         <el-table-column type="selection" width="60" align="center"></el-table-column>
         <el-table-column label="编号" width="100" align="center">
           <template slot-scope="scope">{{scope.row.id}}</template>
+        </el-table-column>
+        <el-table-column label="LOGO" align="center">
+          <template slot-scope="scope"><img style="height: 80px" :src="scope.row.logo"></template>
         </el-table-column>
         <el-table-column label="品牌名称" align="center">
           <template slot-scope="scope">{{scope.row.name}}</template>
@@ -98,13 +102,7 @@
             <el-button
               size="mini"
               type="text"
-              @click="getProductList(scope.$index, scope.row)">100
-            </el-button>
-            <span>评价：</span>
-            <el-button
-              size="mini"
-              type="text"
-              @click="getProductCommentList(scope.$index, scope.row)">1000
+              @click="getProductList(scope.$index, scope.row)" >{{scope.row.productCount}}
             </el-button>
           </template>
         </el-table-column>
@@ -117,7 +115,7 @@
             <el-button
               size="mini"
               type="danger"
-              @click="handleDelete(scope.$index, scope.row)">删除
+              @click="handleDelete(scope.row.id)">删除
             </el-button>
           </template>
         </el-table-column>
@@ -152,7 +150,11 @@
           {
             label: "隐藏品牌",
             value: "hideBrand"
-          }
+          },
+          {
+            label: "删除品牌",
+            value: "delBrand"
+          },
         ],
         operateType: null,
         listQuery: {
@@ -174,7 +176,7 @@
         this.listLoading = true;
         fetchList(this.listQuery).then(response => {
           this.listLoading = false;
-          this.list = response.data;
+          this.list = response.data.list;
           this.total = response.data.total;
           this.totalPage = response.data.totalPage;
           this.pageSize = response.data.pageSize;
@@ -186,13 +188,16 @@
       handleUpdate(index, row) {
         this.$router.push({path: '/pms/updateBrand', query: {id: row.id}})
       },
-      handleDelete(index, row) {
+      handleDelete(ids) {
         this.$confirm('是否要删除该品牌', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          deleteBrand(row.id).then(response => {
+          console.log(ids)
+          let data = new URLSearchParams();
+          data.append("ids", ids);
+          deleteBrand(data).then(response => {
             this.$message({
               message: '删除成功',
               type: 'success',
@@ -205,14 +210,9 @@
       getProductList(index, row) {
         console.log(index, row);
       },
-      getProductCommentList(index, row) {
-        console.log(index, row);
-      },
       handleFactoryStatusChange(index, row) {
-        var data = new URLSearchParams();
-        data.append("ids", row.id);
-        data.append("factoryStatus", row.factoryStatus);
-        updateFactoryStatus(data).then(response => {
+        let param = {ids:row.id,factoryStatus:row.factoryStatus};
+        updateFactoryStatus(param).then(response => {
           this.$message({
             message: '修改成功',
             type: 'success',
@@ -227,11 +227,8 @@
         });
       },
       handleShowStatusChange(index, row) {
-        let data = new URLSearchParams();
-        ;
-        data.append("ids", row.id);
-        data.append("showStatus", row.showStatus);
-        updateShowStatus(data).then(response => {
+        let param = {ids:row.id,showStatus:row.showStatus};
+        updateShowStatus(param).then(response => {
           this.$message({
             message: '修改成功',
             type: 'success',
@@ -259,7 +256,6 @@
         this.getList();
       },
       handleBatchOperate() {
-        console.log(this.multipleSelection);
         if (this.multipleSelection < 1) {
           this.$message({
             message: '请选择一条记录',
@@ -268,34 +264,45 @@
           });
           return;
         }
-        let showStatus = 0;
-        if (this.operateType === 'showBrand') {
-          showStatus = 1;
-        } else if (this.operateType === 'hideBrand') {
-          showStatus = 0;
-        } else {
-          this.$message({
-            message: '请选择批量操作类型',
-            type: 'warning',
-            duration: 1000
-          });
-          return;
+        if (this.operateType !== 'delBrand') {
+            let showStatus = 0;
+            if (this.operateType === 'showBrand') {
+                showStatus = 1;
+            } else if (this.operateType === 'hideBrand') {
+                showStatus = 0;
+            } else {
+                this.$message({
+                    message: '请选择批量操作类型',
+                    type: 'warning',
+                    duration: 1000
+                });
+                return;
+            }
+            let ids = [];
+            for (let i = 0; i < this.multipleSelection.length; i++) {
+                ids.push(this.multipleSelection[i].id);
+            }
+            let data = new URLSearchParams();
+            data.append("ids", ids);
+            data.append("showStatus", showStatus);
+            updateShowStatus(data).then(response => {
+                this.getList();
+                this.$message({
+                    message: '修改成功',
+                    type: 'success',
+                    duration: 1000
+                });
+            });
         }
-        let ids = [];
-        for (let i = 0; i < this.multipleSelection.length; i++) {
-          ids.push(this.multipleSelection[i].id);
+        if (this.operateType === 'delBrand'){
+            let ids = [];
+            console.log(this.multipleSelection)
+            for (let i = 0; i < this.multipleSelection.length; i++) {
+                ids.push(this.multipleSelection[i].id);
+            }
+            console.log(ids)
+            this.handleDelete(ids);
         }
-        let data = new URLSearchParams();
-        data.append("ids", ids);
-        data.append("showStatus", showStatus);
-        updateShowStatus(data).then(response => {
-          this.getList();
-          this.$message({
-            message: '修改成功',
-            type: 'success',
-            duration: 1000
-          });
-        });
       },
       addBrand() {
         this.$router.push({path: '/pms/addBrand'})

@@ -1,51 +1,55 @@
 import request from '@/utils/request'
-export function fetchList() {
+export function fetchList(param) {
+  console.log(param)
   return request({
-    url:'/product/brand/list',
-    method:'get'
-  })
-}
-export function createBrand(data) {
-  return request({
-    url:'/product/brand/create',
-    method:'post',
-    data:data
-  })
-}
-export function updateShowStatus(data) {
-  return request({
-    url:'/product/brand/update/showStatus',
-    method:'post',
-    data:data
-  })
-}
-
-export function updateFactoryStatus(data) {
-  return request({
-    url:'/product/brand/update/factoryStatus',
-    method:'post',
-    data:data
-  })
-}
-
-export function deleteBrand(id) {
-  return request({
-    url:'/product/brand/delete/'+id,
+    url:'/product/item/brand/list',
     method:'get',
+    params:param
+  })
+}
+export function createBrand(brand) {
+  return request({
+    url:'/product/item/brand/create',
+    method:'post',
+    data:brand
+  })
+}
+//修改品牌显示状态
+export function updateShowStatus(param) {
+  return request({
+    url:'/product/item/brand/update/showStatus',
+    method:'put',
+    params:param
+  })
+}
+
+export function updateFactoryStatus(param) {
+  return request({
+    url:'/product/item/brand/update/factoryStatus',
+    method:'put',
+    params:param
+  })
+}
+//删除品牌
+export function deleteBrand(data) {
+  return request({
+    url:'/product/item/brand/delete',
+    method:'delete',
+    data:data
   })
 }
 
 export function getBrand(id) {
   return request({
-    url:'/product/brand/'+id,
+    url:'/product/item/brand/'+id,
     method:'get',
   })
 }
-
+//更新品牌
 export function updateBrand(id,data) {
   return request({
-    url:'/product/brand/update/'+id,
-    method:'post',
+    url:'/product/item/brand/update/'+id,
+    method:'put',
     data:data
   })
 }

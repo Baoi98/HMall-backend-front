@@ -1,6 +1,6 @@
 <template>
   <div style="margin-top: 50px">
-    <el-form :model="value" :rules="rules" ref="productInfoForm" label-width="120px" style="width: 600px" size="small">
+    <el-form :model="value" :rules="rules" ref="productInfoForm" label-width="120px" style="width: 800px;margin-left: 150px;" size="small">
       <el-form-item label="商品分类：" prop="productCategoryId">
         <el-cascader
           v-model="selectProductCateValue"
@@ -150,9 +150,10 @@
       },
       //商品品牌
       getBrandList() {
-        fetchBrandList().then(response => {
+        let param = {keyword:"",pageNum:1,pageSize:100};
+        fetchBrandList(param).then(response => {
           this.brandOptions = [];
-          let brandList = response.data;
+          let brandList = response.data.list;
           for (let i = 0; i < brandList.length; i++) {
             this.brandOptions.push({label: brandList[i].name, value: brandList[i].id});
           }

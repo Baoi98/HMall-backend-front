@@ -1,6 +1,6 @@
 <template>
   <div style="margin-top: 50px">
-    <el-form :model="value" ref="productAttrForm" label-width="120px" style="width: 720px" size="small">
+    <el-form :model="value" ref="productAttrForm" label-width="120px" style="width: 800px;margin-left: 150px;" size="small">
       <el-form-item label="属性类型：">
         <el-select v-model="value.productAttributeCategoryId"
                    placeholder="请选择属性类型"
@@ -123,11 +123,12 @@
       <el-form-item label="规格参数：">
         <el-tabs v-model="activeHtmlName" type="card">
           <el-tab-pane label="电脑端详情" name="pc">
-            <tinymce :width="595" :height="300" v-model="value.detailHtml"></tinymce>
+            <!--<tinymce :width="595" :height="300" v-model="value.detailHtml"></tinymce>-->
+            <WangEditor :width="595" :height="300" style="z-index: -1000" v-model="value.detailHtml"></WangEditor>
           </el-tab-pane>
         </el-tabs>
       </el-form-item>
-      <el-form-item style="text-align: center">
+      <el-form-item style="text-align: center;z-index: 100">
         <el-button size="medium" @click="handlePrev">上一步，填写商品促销</el-button>
         <el-button type="primary" size="medium" @click="handleFinishCommit">完成，提交商品</el-button>
       </el-form-item>
@@ -140,10 +141,11 @@
   import {fetchList as fetchProductAttrList} from '@/api/productAttr'
   import MultiUpload from '@/components/Upload/multiUpload'
   import Tinymce from '@/components/Tinymce'
+  import WangEditor from '@/components/WangEditor'
 
   export default {
     name: "ProductAttrDetail",
-    components: { MultiUpload, Tinymce},
+    components: { MultiUpload, Tinymce, WangEditor},
     props: {
       value: Object,
       isEdit: {
@@ -238,9 +240,10 @@
       },
       //商品属性分类集合
       getProductAttrCateList() {
-        fetchProductAttrCateList().then(response => {
+        let param = {pageNum:1,pageSize:100};
+        fetchProductAttrCateList(param).then(response => {
           this.productAttributeCategoryOptions = [];
-          let list = response.data;
+          let list = response.data.list;
           for (let i = 0; i < list.length; i++) {
             this.productAttributeCategoryOptions.push({label: list[i].name, value: list[i].id});
           }
@@ -248,8 +251,9 @@
       },
       //商品属性集合
       getProductAttrList(type, cid) {
-        fetchProductAttrList(cid, {type:type}).then(response => {
-          let list = response.data;
+        let param = {type:type,pageNum:1,pageSize:100};
+        fetchProductAttrList(cid, param).then(response => {
+          let list = response.data.list;
           if (type === 0) {
             this.selectProductAttr = [];
             for (let i = 0; i < list.length; i++) {
@@ -297,18 +301,18 @@
       },
       //获取设置的可手动添加属性值
       getEditAttrOptions(id) {
-        let options = [];
-        for (let i = 0; i < this.value.productAttributeValueList.length; i++) {
-          let attrValue = this.value.productAttributeValueList[i];
-          if (attrValue.productAttributeId === id) {
-            let strArr = attrValue.value.split(',');
-            for (let j = 0; j < strArr.length; j++) {
-              options.push(strArr[j]);
-            }
-            break;
+          let options = [];
+          for (let i = 0; i < this.value.productAttributeValueList.length; i++) {
+              let attrValue = this.value.productAttributeValueList[i];
+              if (attrValue.productAttributeId === id) {
+                  let strArr = attrValue.value.split(',');
+                  for (let j = 0; j < strArr.length; j++) {
+                      options.push(strArr[j]);
+                  }
+                  break;
+              }
           }
-        }
-        return options;
+          return options;
       },
       //获取选中的属性值
       getEditAttrValues(index) {

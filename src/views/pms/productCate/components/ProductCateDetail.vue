@@ -38,8 +38,7 @@
       </el-form-item>
       <el-form-item v-for="(filterProductAttr, index) in filterProductAttrList"
                     :label="index | filterLabelFilter"
-                    :key="filterProductAttr.key"
-      >
+                    :key="filterProductAttr.key">
         <el-cascader
           clearable
           v-model="filterProductAttr.value"
@@ -50,6 +49,7 @@
       <el-form-item>
         <el-button size="small" type="primary" @click="handleAddFilterAttr()">新增</el-button>
       </el-form-item>
+
       <el-form-item label="关键词：">
         <el-input v-model="productCate.keywords"></el-input>
       </el-form-item>
@@ -71,7 +71,6 @@
 
   const defaultProductCate = {
     description: '',
-    icon: '',
     keywords: '',
     name: '',
     navStatus: 0,
@@ -79,7 +78,6 @@
     productUnit: '',
     showStatus: 0,
     sort: 0,
-    productAttributeIdList: []
   };
   export default {
     name: "ProductCateDetail",
@@ -111,7 +109,6 @@
           this.productCate = response.data;
         });
         getProductAttrInfo(this.$route.query.id).then(response => {
-          console.log(response)
           if (response.data != null && response.data.length > 0) {
             this.filterProductAttrList = [];
             for (let i = 0; i < response.data.length; i++) {
@@ -192,6 +189,7 @@
                     type: 'success',
                     duration: 1000
                   });
+                  this.$router.back();
                 });
               }
             });
@@ -215,32 +213,32 @@
         }];
       },
       removeFilterAttr(productAttributeId) {
-        if (this.filterProductAttrList.length === 1) {
-          this.$message({
-            message: '至少要留一个',
-            type: 'warning',
-            duration: 1000
-          });
-          return;
-        }
-        var index = this.filterProductAttrList.indexOf(productAttributeId);
-        if (index !== -1) {
-          this.filterProductAttrList.splice(index, 1)
-        }
+          if (this.filterProductAttrList.length === 1) {
+              this.$message({
+                  message: '至少要留一个',
+                  type: 'warning',
+                  duration: 1000
+              });
+              return;
+          }
+          var index = this.filterProductAttrList.indexOf(productAttributeId);
+          if (index !== -1) {
+              this.filterProductAttrList.splice(index, 1)
+          }
       },
       handleAddFilterAttr() {
-        if (this.filterProductAttrList.length === 3) {
-          this.$message({
-            message: '最多添加三个',
-            type: 'warning',
-            duration: 1000
+          if (this.filterProductAttrList.length === 3) {
+              this.$message({
+                  message: '最多添加三个',
+                  type: 'warning',
+                  duration: 1000
+              });
+              return;
+          }
+          this.filterProductAttrList.push({
+              value: null,
+              key: Date.now()
           });
-          return;
-        }
-        this.filterProductAttrList.push({
-          value: null,
-          key: Date.now()
-        });
       }
     },
     filters: {

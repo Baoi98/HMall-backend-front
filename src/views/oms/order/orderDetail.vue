@@ -15,21 +15,17 @@
         <span class="color-danger">当前订单状态：{{order.status | formatStatus}}</span>
         <div class="operate-button-container" v-show="order.status===0">
           <el-button size="mini" @click="showUpdateReceiverDialog">修改收货人信息</el-button>
-          <el-button size="mini">修改商品信息</el-button>
           <el-button size="mini" @click="showUpdateMoneyDialog">修改费用信息</el-button>
-          <el-button size="mini" @click="showMessageDialog">发送站内信</el-button>
           <el-button size="mini" @click="showCloseOrderDialog">关闭订单</el-button>
           <el-button size="mini" @click="showMarkOrderDialog">备注订单</el-button>
         </div>
         <div class="operate-button-container" v-show="order.status===1">
           <el-button size="mini" @click="showUpdateReceiverDialog">修改收货人信息</el-button>
-          <el-button size="mini" @click="showMessageDialog">发送站内信</el-button>
           <el-button size="mini">取消订单</el-button>
           <el-button size="mini" @click="showMarkOrderDialog">备注订单</el-button>
         </div>
         <div class="operate-button-container" v-show="order.status===2||order.status===3">
           <el-button size="mini" @click="showLogisticsDialog">订单跟踪</el-button>
-          <el-button size="mini" @click="showMessageDialog">发送站内信</el-button>
           <el-button size="mini" @click="showMarkOrderDialog">备注订单</el-button>
         </div>
         <div class="operate-button-container" v-show="order.status===4">
@@ -62,16 +58,12 @@
           <el-col :span="4" class="table-cell-title">配送方式</el-col>
           <el-col :span="4" class="table-cell-title">物流单号</el-col>
           <el-col :span="4" class="table-cell-title">自动确认收货时间</el-col>
-          <el-col :span="4" class="table-cell-title">订单可得优币</el-col>
-          <el-col :span="4" class="table-cell-title">订单可得成长值</el-col>
           <el-col :span="4" class="table-cell-title">活动信息</el-col>
         </el-row>
         <el-row>
           <el-col :span="4" class="table-cell">{{order.deliveryCompany | formatNull}}</el-col>
           <el-col :span="4" class="table-cell">{{order.deliverySn | formatNull}}</el-col>
           <el-col :span="4" class="table-cell">{{order.autoConfirmDay}}天</el-col>
-          <el-col :span="4" class="table-cell">{{order.integration}}</el-col>
-          <el-col :span="4" class="table-cell">{{order.growth}}</el-col>
           <el-col :span="4" class="table-cell">
             <el-popover
               placement="top-start"
@@ -154,29 +146,17 @@
         <el-row>
           <el-col :span="6" class="table-cell-title">商品合计</el-col>
           <el-col :span="6" class="table-cell-title">运费</el-col>
-          <el-col :span="6" class="table-cell-title">优惠券</el-col>
-          <el-col :span="6" class="table-cell-title">积分抵扣</el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="6" class="table-cell">￥{{order.totalAmount}}</el-col>
-          <el-col :span="6" class="table-cell">￥{{order.freightAmount}}</el-col>
-          <el-col :span="6" class="table-cell">-￥{{order.couponAmount}}</el-col>
-          <el-col :span="6" class="table-cell">-￥{{order.integrationAmount}}</el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="6" class="table-cell-title">活动优惠</el-col>
-          <el-col :span="6" class="table-cell-title">折扣金额</el-col>
           <el-col :span="6" class="table-cell-title">订单总金额</el-col>
           <el-col :span="6" class="table-cell-title">应付款金额</el-col>
         </el-row>
         <el-row>
-          <el-col :span="6" class="table-cell">-￥{{order.promotionAmount}}</el-col>
-          <el-col :span="6" class="table-cell">-￥{{order.discountAmount}}</el-col>
+          <el-col :span="6" class="table-cell">￥{{order.totalAmount}}</el-col>
+          <el-col :span="6" class="table-cell">￥{{order.freightAmount}}</el-col>
           <el-col :span="6" class="table-cell">
             <span class="color-danger">￥{{order.totalAmount+order.freightAmount}}</span>
           </el-col>
           <el-col :span="6" class="table-cell">
-            <span class="color-danger">￥{{order.payAmount+order.freightAmount-order.discountAmount}}</span>
+            <span class="color-danger">￥{{order.totalAmount+order.freightAmount}}</span>
           </el-col>
         </el-row>
       </div>
@@ -186,7 +166,7 @@
       </div>
       <el-table style="margin-top: 20px;width: 100%"
                 ref="orderHistoryTable"
-                :data="order.historyList" border>
+                :data="order.operateList" border>
         <el-table-column label="操作者"  width="120" align="center">
           <template slot-scope="scope">
             {{scope.row.operateMan}}
@@ -259,58 +239,25 @@
         <el-row>
           <el-col :span="6" class="table-cell-title">商品合计</el-col>
           <el-col :span="6" class="table-cell-title">运费</el-col>
-          <el-col :span="6" class="table-cell-title">优惠券</el-col>
-          <el-col :span="6" class="table-cell-title">积分抵扣</el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="6" class="table-cell">￥{{order.totalAmount}}</el-col>
-          <el-col :span="6" class="table-cell">
-            <el-input v-model.number="moneyInfo.freightAmount" size="mini"><template slot="prepend">￥</template></el-input>
-          </el-col>
-          <el-col :span="6" class="table-cell">-￥{{order.couponAmount}}</el-col>
-          <el-col :span="6" class="table-cell">-￥{{order.integrationAmount}}</el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="6" class="table-cell-title">活动优惠</el-col>
-          <el-col :span="6" class="table-cell-title">折扣金额</el-col>
           <el-col :span="6" class="table-cell-title">订单总金额</el-col>
           <el-col :span="6" class="table-cell-title">应付款金额</el-col>
         </el-row>
         <el-row>
-          <el-col :span="6" class="table-cell">-￥{{order.promotionAmount}}</el-col>
+          <el-col :span="6" class="table-cell">￥{{order.totalAmount}}</el-col>
           <el-col :span="6" class="table-cell">
-            <el-input v-model.number="moneyInfo.discountAmount" size="mini"><template slot="prepend">-￥</template></el-input>
+            <el-input v-model.number="moneyInfo.freightAmount" size="small"><template slot="prepend">￥</template></el-input>
           </el-col>
           <el-col :span="6" class="table-cell">
             <span class="color-danger">￥{{order.totalAmount+moneyInfo.freightAmount}}</span>
           </el-col>
           <el-col :span="6" class="table-cell">
-            <span class="color-danger">￥{{order.payAmount+moneyInfo.freightAmount-moneyInfo.discountAmount}}</span>
+            <span class="color-danger">￥{{order.totalAmount+moneyInfo.freightAmount}}</span>
           </el-col>
         </el-row>
       </div>
       <span slot="footer" class="dialog-footer">
       <el-button @click="moneyDialogVisible = false">取 消</el-button>
       <el-button type="primary" @click="handleUpdateMoneyInfo">确 定</el-button>
-      </span>
-    </el-dialog>
-    <el-dialog title="发送站内信"
-               :visible.sync="messageDialogVisible"
-               width="40%">
-      <el-form :model="message"
-               ref="receiverInfoForm"
-               label-width="150px">
-        <el-form-item label="标题：">
-          <el-input v-model="message.title" style="width: 200px"></el-input>
-        </el-form-item>
-        <el-form-item label="内容：">
-          <el-input v-model="message.content" type="textarea" rows="3">
-          </el-input>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="messageDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="handleSendMessage">确 定</el-button>
       </span>
     </el-dialog>
     <el-dialog title="关闭订单"
@@ -573,19 +520,6 @@
         this.messageDialogVisible=true;
         this.message.title=null;
         this.message.content=null;
-      },
-      handleSendMessage(){
-        this.$confirm('是否要发送站内信?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.messageDialogVisible=false;
-          this.$message({
-            type: 'success',
-            message: '发送成功!'
-          });
-        });
       },
       showCloseOrderDialog(){
         this.closeDialogVisible=true;

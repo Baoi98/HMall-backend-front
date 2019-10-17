@@ -52,6 +52,7 @@
     firstLetter: '',
     logo: '',
     name: '',
+    productCount : 0,
     showStatus: 0,
     sort: 0
   };
@@ -118,6 +119,7 @@
                     type: 'success',
                     duration:1000
                   });
+                  this.$router.back();
                 });
               }
             });

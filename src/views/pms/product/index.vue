@@ -333,6 +333,10 @@
           {
             label: "取消新品",
             value: "newOff"
+          },
+          {
+              label: "批量删除",
+              value: "delProduct"
           }
         ],
         operateType: null,
@@ -403,9 +407,10 @@
         });
       },
       getBrandList() {
-        fetchBrandList().then(response => {
+        let param = {keyword:"",pageNum:1,pageSize:100};
+        fetchBrandList(param).then(response => {
           this.brandOptions = [];
-          let brandList = response.data;
+          let brandList = response.data.list;
           for (let i = 0; i < brandList.length; i++) {
             this.brandOptions.push({label: brandList[i].name, value: brandList[i].id});
           }
@@ -437,13 +442,14 @@
           this.editSkuInfo.stockList=response.data;
         });
         //获取商品sku属性
-        fetchProductAttrList(row.productAttributeCategoryId,{type:0}).then(response=>{
-          this.editSkuInfo.productAttr=response.data;
+        let param = {type:0,pageNum:1,pageSize:5};
+        fetchProductAttrList(row.productAttributeCategoryId,param).then(response=>{
+          this.editSkuInfo.productAttr=response.data.list;
         });
       },
       handleSearchEditSku(){
         fetchSkuStockList(this.editSkuInfo.productId,{keyword:this.editSkuInfo.keyword}).then(response=>{
-          this.editSkuInfo.stockList=response.data;
+          this.editSkuInfo.stockList=response.data.list;
         });
       },
       handleEditSkuConfirm(){
@@ -523,6 +529,7 @@
               this.updateNewStatus(0,ids);
               break;
             case this.operates[6].value:
+              this.updateDeleteStatus(1,ids);
               break;
             case this.operates[7].value:
               this.updateDeleteStatus(1,ids);

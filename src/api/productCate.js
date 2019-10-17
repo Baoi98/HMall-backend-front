@@ -8,14 +8,14 @@ export function fetchList(parentId,params) {
 }
 export function deleteProductCate(id) {
   return request({
-    url:'/productCategory/delete/'+id,
-    method:'post'
+    url:'/product/item/category/delete/'+id,
+    method:'delete'
   })
 }
 
 export function createProductCate(data) {
   return request({
-    url:'/productCategory/create',
+    url:'/product/item/category/create',
     method:'post',
     data:data
   })

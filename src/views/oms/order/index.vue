@@ -20,7 +20,7 @@
       </div>
       <div style="margin-top: 15px">
         <el-form :inline="true" :model="listQuery" size="small" label-width="140px">
-          <el-form-item label="输入搜索：">
+          <el-form-item label="订单编号：">
             <el-input v-model="listQuery.orderSn" class="input-width" placeholder="订单编号"></el-input>
           </el-form-item>
           <el-form-item label="收货人：">
@@ -53,21 +53,32 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="订单来源：">
-            <el-select v-model="listQuery.sourceType" class="input-width" placeholder="全部" clearable>
-              <el-option v-for="item in sourceTypeOptions"
-                         :key="item.value"
-                         :label="item.label"
-                         :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
         </el-form>
       </div>
     </el-card>
     <el-card class="operate-container" shadow="never">
       <i class="el-icon-tickets"></i>
       <span>数据列表</span>
+      <div class="batch-operate-container">
+        <el-select
+          size="small"
+          v-model="operateType" placeholder="批量操作">
+          <el-option
+            v-for="item in operateOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+        <el-button
+          style="margin-left: 20px"
+          class="search-button"
+          @click="handleBatchOperate()"
+          type="primary"
+          size="small">
+          确定
+        </el-button>
+      </div>
     </el-card>
     <div class="table-container">
       <el-table ref="orderTable"
@@ -127,26 +138,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <div class="batch-operate-container">
-      <el-select
-        size="small"
-        v-model="operateType" placeholder="批量操作">
-        <el-option
-          v-for="item in operateOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
-      <el-button
-        style="margin-left: 20px"
-        class="search-button"
-        @click="handleBatchOperate()"
-        type="primary"
-        size="small">
-        确定
-      </el-button>
-    </div>
+
     <div class="pagination-container">
       <el-pagination
         background
@@ -189,7 +181,6 @@
     receiverKeyword: null,
     status: null,
     orderType: null,
-    sourceType: null,
     createTime: null,
   };
   export default {

@@ -23,9 +23,12 @@ export function deleteProductAttrCate(id) {
 }
 
 export function updateProductAttrCate(id,name) {
+  console.log(id)
+  console.log(name)
   return request({
-    url:'/product/item/attribute/category/update/' + id + '/' + name,
-    method:'put'
+    url:'/product/item/attribute/category/update/' + id ,
+    method:'put',
+    data: name
   })
 }
 export function fetchListWithAttr() {
