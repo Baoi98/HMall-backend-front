@@ -3,8 +3,29 @@
     <el-card class="operate-container" shadow="never">
       <i class="el-icon-tickets"></i>
       <span>数据列表</span>
+      <div class="batch-operate-container">
+        <el-select
+          size="small"
+          v-model="operateType" placeholder="批量操作">
+          <el-option
+            v-for="item in operateOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+        <el-button
+          style="margin-left: 20px;"
+          class="search-button"
+          @click="handleBatchOperate"
+          type="primary"
+          size="small">
+          确定
+        </el-button>
+      </div>
       <el-button
-        size="mini"
+        style="margin-top: 8px;"
+        size="small"
         @click="handleAdd"
         class="btn-add">添加
       </el-button>
@@ -50,26 +71,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <div class="batch-operate-container">
-      <el-select
-        size="small"
-        v-model="operateType" placeholder="批量操作">
-        <el-option
-          v-for="item in operateOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
-      <el-button
-        style="margin-left: 20px"
-        class="search-button"
-        @click="handleBatchOperate"
-        type="primary"
-        size="small">
-        确定
-      </el-button>
-    </div>
+
     <div class="pagination-container">
       <el-pagination
         background

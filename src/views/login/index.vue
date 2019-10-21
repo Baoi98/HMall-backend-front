@@ -39,6 +39,18 @@
               <svg-icon icon-class="eye" />
           </span>
         </el-form-item>
+        <el-form-item>
+          <div id="vaptchaContainer" data-vid="5da947d5fc650e7dd83ca01c" style="width: 328px;height: 40px;">
+            <div class="vaptcha-init-main">
+              <div class="vaptcha-init-loading">
+                <a href="https://www.vaptcha.com" target="_blank">
+                  <img src="https://cdn.vaptcha.com/vaptcha-loading.gif" />
+                </a>
+                <span class="vaptcha-text">Vaptcha启动中...</span>
+              </div>
+            </div>
+          </div>
+        </el-form-item>
         <el-form-item style="margin-bottom: 60px">
           <el-button style="width: 100%" type="primary" :loading="loading"
                      @click.native.prevent="handleLogin()">
@@ -90,7 +102,24 @@
         supportDialogVisible:false
       }
     },
+    mounted() {
+        this.initVaptcha()
+    },
     methods: {
+      initVaptcha () {
+          // eslint-disable-next-line no-undef
+          vaptcha({
+              vid: '5da947d5fc650e7dd83ca01c',
+              type: 'click',
+              style: 'light',
+              container: '#vaptchaContainer'
+          }).then(function (vaptchaObj) {
+              vaptchaObj.render()
+              vaptchaObj.listen('pass', function () {
+              })
+              this.loading = true
+          })
+      },
       showPwd() {
         if (this.pwdType === 'password') {
           this.pwdType = ''
@@ -101,13 +130,19 @@
       handleLogin() {
         this.$refs.loginForm.validate(valid => {
           if (valid) {
-            this.loading = true;
-            this.$store.dispatch('Login', this.loginForm).then(() => {
-              this.loading = false;
-              this.$router.push({path: '/'})
-            }).catch(() => {
-              this.loading = false
-            })
+            alert(this.loading)
+            this.loading = true
+            if(this.loading == true){
+              this.$store.dispatch('Login', this.loginForm).then(() => {
+                  this.loading = false;
+                  this.$router.push({path: '/'})
+              }).catch(() => {
+                  this.loading = false
+              })
+            }
+            else{
+                alert("123")
+            }
           } else {
             console.log('参数验证不合法！');
             return false

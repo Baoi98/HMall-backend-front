@@ -4,6 +4,7 @@
       <div>
         <i class="el-icon-search"></i>
         <span>筛选搜索</span>
+
         <el-button
           style="float:right"
           type="primary"
@@ -22,6 +23,9 @@
         <el-form :inline="true" :model="listQuery" size="small" label-width="140px">
           <el-form-item label="输入搜索：">
             <el-input v-model="listQuery.id" class="input-width" placeholder="服务单号"></el-input>
+          </el-form-item>
+          <el-form-item label="收货人：">
+            <el-input v-model="listQuery.receiverKeyword" class="input-width" placeholder="收货人姓名/号码"></el-input>
           </el-form-item>
           <el-form-item label="处理状态：">
             <el-select v-model="listQuery.status" placeholder="全部" clearable class="input-width">
@@ -59,6 +63,26 @@
     <el-card class="operate-container" shadow="never">
       <i class="el-icon-tickets"></i>
       <span>数据列表</span>
+      <div class="batch-operate-container">
+        <el-select
+          size="small"
+          v-model="operateType" placeholder="批量操作">
+          <el-option
+            v-for="item in operateOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+        <el-button
+          style="margin-left: 20px"
+          class="search-button"
+          @click="handleBatchOperate()"
+          type="primary"
+          size="small">
+          确定
+        </el-button>
+      </div>
     </el-card>
     <div class="table-container">
       <el-table ref="returnApplyTable"
@@ -94,26 +118,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <div class="batch-operate-container">
-      <el-select
-        size="small"
-        v-model="operateType" placeholder="批量操作">
-        <el-option
-          v-for="item in operateOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
-      <el-button
-        style="margin-left: 20px"
-        class="search-button"
-        @click="handleBatchOperate()"
-        type="primary"
-        size="small">
-        确定
-      </el-button>
-    </div>
+
     <div class="pagination-container">
       <el-pagination
         background
@@ -135,7 +140,7 @@
     pageNum: 1,
     pageSize: 10,
     id: null,
-    receiverKeyword: null,
+    memberUsername: null,
     status: null,
     createTime: null,
     handleMan: null,

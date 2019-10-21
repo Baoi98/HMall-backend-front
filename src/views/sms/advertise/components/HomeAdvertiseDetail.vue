@@ -18,18 +18,6 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="开始时间：" prop="startTime">
-        <el-date-picker
-          type="datetime"
-          placeholder="选择日期"
-          v-model="homeAdvertise.startTime"></el-date-picker>
-      </el-form-item>
-      <el-form-item label="到期时间：" prop="endTime">
-        <el-date-picker
-          type="datetime"
-          placeholder="选择日期"
-          v-model="homeAdvertise.endTime"></el-date-picker>
-      </el-form-item>
       <el-form-item label="上线/下线：">
         <el-radio-group v-model="homeAdvertise.status">
           <el-radio :label="0">下线</el-radio>
@@ -78,8 +66,6 @@
     name: null,
     type: 1,
     pic: null,
-    startTime: null,
-    endTime: null,
     status: 0,
     url: null,
     note: null,
@@ -104,12 +90,6 @@
           ],
           url: [
             {required: true, message: '请输入广告链接', trigger: 'blur'}
-          ],
-          startTime: [
-            {required: true, message: '请选择开始时间', trigger: 'blur'}
-          ],
-          endTime: [
-            {required: true, message: '请选择到期时间', trigger: 'blur'}
           ],
           pic: [
             {required: true, message: '请选择广告图片', trigger: 'blur'}
@@ -155,6 +135,7 @@
                     type: 'success',
                     duration:1000
                   });
+                  this.$router.back();
                 });
               }
             });

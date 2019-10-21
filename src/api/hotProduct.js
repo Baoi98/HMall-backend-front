@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 export function fetchList(params) {
   return request({
-    url:'/home/recommendProduct/list',
+    url:'/backend/admin/home/recommendProduct/list',
     method:'get',
     params:params
   })
@@ -9,23 +9,23 @@ export function fetchList(params) {
 
 export function updateRecommendStatus(data) {
   return request({
-    url:'/home/recommendProduct/update/recommendStatus',
-    method:'post',
+    url:'/backend/admin/home/recommendProduct/update/recommendStatus',
+    method:'put',
     data:data
   })
 }
 
 export function deleteHotProduct(data) {
   return request({
-    url:'/home/recommendProduct/delete',
-    method:'post',
+    url:'/backend/admin/home/recommendProduct/delete',
+    method:'delete',
     data:data
   })
 }
 
 export function createHotProduct(data) {
   return request({
-    url:'/home/recommendProduct/create',
+    url:'/backend/admin/home/recommendProduct/create',
     method:'post',
     data:data
   })
@@ -33,8 +33,8 @@ export function createHotProduct(data) {
 
 export function updateHotProductSort(params) {
   return request({
-    url:'/home/recommendProduct/update/sort/'+params.id,
-    method:'post',
+    url:'/backend/admin/home/recommendProduct/update/sort/'+params.id,
+    method:'put',
     params:params
   })
 }

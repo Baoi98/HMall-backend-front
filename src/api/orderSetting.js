@@ -1,15 +1,15 @@
 import request from '@/utils/request'
 export function getOrderSetting(id) {
   return request({
-    url:'/orderSetting/'+id,
+    url:'/order/orderSetting/'+id,
     method:'get',
   })
 }
 
 export function updateOrderSetting(id,data) {
   return request({
-    url:'/orderSetting/update/'+id,
-    method:'post',
+    url:'/order/orderSetting/update/'+id,
+    method:'put',
     data:data
   })
 }

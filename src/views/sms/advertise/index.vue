@@ -23,7 +23,7 @@
           <el-form-item label="广告名称：">
             <el-input v-model="listQuery.name" class="input-width" placeholder="广告名称"></el-input>
           </el-form-item>
-          <el-form-item label="广告位置：">
+          <!--<el-form-item label="广告位置：">
             <el-select v-model="listQuery.type" placeholder="全部" clearable class="input-width">
               <el-option v-for="item in typeOptions"
                          :key="item.value"
@@ -40,14 +40,34 @@
               type="date"
               placeholder="请选择时间">
             </el-date-picker>
-          </el-form-item>
+          </el-form-item>-->
         </el-form>
       </div>
     </el-card>
     <el-card class="operate-container" shadow="never">
       <i class="el-icon-tickets"></i>
       <span>数据列表</span>
-      <el-button size="mini" class="btn-add" @click="handleAdd()">添加广告</el-button>
+      <div class="batch-operate-container">
+        <el-select
+          size="small"
+          v-model="operateType" placeholder="批量操作">
+          <el-option
+            v-for="item in operates"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+        <el-button
+          style="margin-left: 20px"
+          class="search-button"
+          @click="handleBatchOperate()"
+          type="primary"
+          size="small">
+          确定
+        </el-button>
+      </div>
+      <el-button size="small" class="btn-add" @click="handleAdd()">添加广告</el-button>
     </el-card>
     <div class="table-container">
       <el-table ref="homeAdvertiseTable"
@@ -59,20 +79,14 @@
         <el-table-column label="编号" width="120" align="center">
           <template slot-scope="scope">{{scope.row.id}}</template>
         </el-table-column>
-        <el-table-column label="广告名称" align="center">
+        <el-table-column label="广告名称" width="240" align="center">
           <template slot-scope="scope">{{scope.row.name}}</template>
         </el-table-column>
-        <el-table-column label="广告位置" width="120" align="center">
+        <el-table-column label="广告位置" width="240" align="center">
           <template slot-scope="scope">{{scope.row.type | formatType}}</template>
         </el-table-column>
-        <el-table-column label="广告图片" width="120" align="center">
+        <el-table-column label="广告图片" align="center">
           <template slot-scope="scope"><img style="height: 80px" :src="scope.row.pic"></template>
-        </el-table-column>
-        <el-table-column label="时间" width="220" align="center">
-          <template slot-scope="scope">
-            <p>开始时间：{{scope.row.startTime | formatTime}}</p>
-            <p>到期时间：{{scope.row.endTime | formatTime}}</p>
-          </template>
         </el-table-column>
         <el-table-column label="上线/下线" width="120" align="center">
           <template slot-scope="scope">
@@ -87,10 +101,7 @@
         <el-table-column label="点击次数" width="120" align="center">
           <template slot-scope="scope">{{scope.row.clickCount}}</template>
         </el-table-column>
-        <el-table-column label="生成订单" width="120" align="center">
-          <template slot-scope="scope">{{scope.row.orderCount}}</template>
-        </el-table-column>
-        <el-table-column label="操作" width="120" align="center">
+        <el-table-column label="操作" width="240" align="center">
           <template slot-scope="scope">
             <el-button size="mini"
                        type="text"
@@ -103,26 +114,6 @@
           </template>
         </el-table-column>
       </el-table>
-    </div>
-    <div class="batch-operate-container">
-      <el-select
-        size="small"
-        v-model="operateType" placeholder="批量操作">
-        <el-option
-          v-for="item in operates"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
-      <el-button
-        style="margin-left: 20px"
-        class="search-button"
-        @click="handleBatchOperate()"
-        type="primary"
-        size="small">
-        确定
-      </el-button>
     </div>
     <div class="pagination-container">
       <el-pagination
@@ -144,9 +135,7 @@
   const defaultListQuery = {
     pageNum: 1,
     pageSize: 5,
-    name: null,
-    type: null,
-    endTime:null
+    name: null
   };
   const defaultTypeOptions = [
     {
