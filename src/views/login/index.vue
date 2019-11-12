@@ -130,7 +130,6 @@
       handleLogin() {
         this.$refs.loginForm.validate(valid => {
           if (valid) {
-            alert(this.loading)
             this.loading = true
             if(this.loading == true){
               this.$store.dispatch('Login', this.loginForm).then(() => {

@@ -30,11 +30,11 @@
         </el-switch>
       </el-form-item>
       <el-form-item label="服务保证：">
-        <el-checkbox-group v-model="selectServiceList">
-          <el-checkbox :label="1">无忧退货</el-checkbox>
-          <el-checkbox :label="2">快速退款</el-checkbox>
-          <el-checkbox :label="3">免费包邮</el-checkbox>
-        </el-checkbox-group>
+        <el-radio-group v-model="selectServiceList">
+          <el-radio :label="1">无忧退货</el-radio>
+          <el-radio :label="2">快速退款</el-radio>
+          <el-radio :label="3">免费包邮</el-radio>
+        </el-radio-group>
       </el-form-item>
       <el-form-item label="详细页标题：">
         <el-input v-model="value.detailTitle"></el-input>
@@ -87,7 +87,8 @@
           disabledDate(time) {
             return time.getTime() < Date.now();
           }
-        }
+        },
+        selectServiceList: 3
       }
     },
     created() {
