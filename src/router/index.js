@@ -190,7 +190,7 @@ export const constantRouterMap = [
     name: 'sms',
     meta: {title: '营销', icon: 'sms'},
     children: [
-      {
+      /*{
         path: 'flash',
         name: 'flash',
         component: () => import('@/views/sms/flash/index'),
@@ -216,7 +216,7 @@ export const constantRouterMap = [
         component: () => import('@/views/sms/flash/productRelationList'),
         meta: {title: '秒杀商品列表'},
         hidden:true
-      },
+      },*/
       {
         path: 'brand',
         name: 'homeBrand',

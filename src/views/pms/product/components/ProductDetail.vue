@@ -104,6 +104,7 @@
     created(){
       if(this.isEdit){
         getProduct(this.$route.query.id).then(response=>{
+          console.log(response.data)
           this.productParam=response.data;
         });
       }

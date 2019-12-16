@@ -1,13 +1,13 @@
 <template>
   <div style="margin-top: 50px">
     <el-form :model="value" ref="productSaleForm" label-width="120px" style="width: 800px;margin-left: 150px;" size="small">
-      <el-form-item label="预告商品：">
+      <!--<el-form-item label="预告商品：">
         <el-switch
           v-model="value.previewStatus"
           :active-value="1"
           :inactive-value="0">
         </el-switch>
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item label="商品上架：">
         <el-switch
           v-model="value.publishStatus"
@@ -32,8 +32,7 @@
       <el-form-item label="服务保证：">
         <el-radio-group v-model="selectServiceList">
           <el-radio :label="1">无忧退货</el-radio>
-          <el-radio :label="2">快速退款</el-radio>
-          <el-radio :label="3">免费包邮</el-radio>
+          <el-radio :label="2">免费包邮</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="详细页标题：">
@@ -48,7 +47,7 @@
       <el-form-item label="商品备注：">
         <el-input v-model="value.note" type="textarea" :autoSize="true"></el-input>
       </el-form-item>
-      <el-form-item label="选择优惠方式：">
+      <!--<el-form-item label="选择优惠方式：">
         <el-radio-group v-model="value.promotionType" size="small">
           <el-radio-button :label="0">无优惠</el-radio-button>
           <el-radio-button :label="1">特惠促销</el-radio-button>
@@ -59,7 +58,7 @@
           促销价格：
           <el-input style="width: 220px" v-model="value.promotionPrice" placeholder="输入促销价格"></el-input>
         </div>
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item style="text-align: center">
         <el-button size="medium" @click="handlePrev">上一步，填写商品信息</el-button>
         <el-button type="primary" size="medium" @click="handleNext">下一步，填写商品属性</el-button>

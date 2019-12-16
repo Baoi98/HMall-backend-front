@@ -79,14 +79,17 @@
           <el-col class="form-border font-small" :span="18">{{orderReturnApply.reason}}</el-col>
         </el-row>
         <el-row>
-          <el-col class="form-border form-left-bg font-small" :span="6">问题描述</el-col>
-          <el-col class="form-border font-small" :span="18">{{orderReturnApply.description}}</el-col>
-        </el-row>
-        <el-row>
           <el-col class="form-border form-left-bg font-small" :span="6" style="height:100px;line-height:80px">凭证图片
           </el-col>
           <el-col class="form-border font-small" :span="18" style="height:100px">
             <img v-for="item in proofPics" style="width:80px;height:80px" :src="item">
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col class="form-border form-left-bg font-small" :span="6" style="height:300px;line-height:80px">问题描述
+          </el-col>
+          <el-col class="form-border font-small" :span="18" style="height:300px">
+            <span v-html="orderReturnApply.description"></span>
           </el-col>
         </el-row>
       </div>
@@ -96,12 +99,11 @@
           <el-col class="form-border font-small" :span="18">￥{{totalAmount}}</el-col>
         </el-row>
         <el-row>
-          <el-col class="form-border form-left-bg font-small" :span="6" style="height:52px;line-height:32px">确认退款金额
-          </el-col>
+          <el-col class="form-border form-left-bg font-small" :span="6" style="height:52px;line-height:32px">确认退款金额</el-col>
           <el-col class="form-border font-small" style="height:52px" :span="18">
             ￥
             <el-input size="small" v-model="updateStatusParam.returnAmount"
-                      :disabled="orderReturnApply.status!==0"
+                      :disabled="orderReturnApply.status!==2"
                       style="width:200px;margin-left: 10px"></el-input>
           </el-col>
         </el-row>
@@ -112,7 +114,7 @@
           <el-col class="form-border font-small" style="height:52px" :span="18">
             <el-select size="small"
                        style="width:200px"
-                       :disabled="orderReturnApply.status!==0"
+                       :disabled="orderReturnApply.status!==2"
                        v-model="updateStatusParam.companyAddressId">
               <el-option v-for="address in companyAddressList"
                          :key="address.id"
@@ -140,7 +142,7 @@
         </el-row>
         </div>
       </div>
-      <div class="form-container-border" v-show="orderReturnApply.status!==0">
+      <div class="form-container-border" v-show="orderReturnApply.status!==2">
         <el-row>
           <el-col class="form-border form-left-bg font-small" :span="6">处理人员</el-col>
           <el-col class="form-border font-small" :span="18">{{orderReturnApply.handleMan}}</el-col>
@@ -154,7 +156,7 @@
           <el-col class="form-border font-small" :span="18">{{orderReturnApply.handleNote}}</el-col>
         </el-row>
       </div>
-      <div class="form-container-border" v-show="orderReturnApply.status===2">
+      <div class="form-container-border" v-show="orderReturnApply.status===4">
         <el-row>
           <el-col class="form-border form-left-bg font-small" :span="6">收货人员</el-col>
           <el-col class="form-border font-small" :span="18">{{orderReturnApply.receiveMan}}</el-col>
@@ -168,7 +170,7 @@
           <el-col class="form-border font-small" :span="18">{{orderReturnApply.receiveNote}}</el-col>
         </el-row>
       </div>
-      <div class="form-container-border" v-show="orderReturnApply.status===0">
+      <div class="form-container-border" v-show="orderReturnApply.status===4">
         <el-row>
           <el-col class="form-border form-left-bg font-small" :span="6" style="height:52px;line-height:32px">处理备注</el-col>
           <el-col class="form-border font-small" :span="18">
@@ -176,7 +178,7 @@
           </el-col>
         </el-row>
       </div>
-      <div class="form-container-border" v-show="orderReturnApply.status===1">
+      <div class="form-container-border" v-show="orderReturnApply.status===4">
         <el-row>
           <el-col class="form-border form-left-bg font-small" :span="6" style="height:52px;line-height:32px">收货备注</el-col>
           <el-col class="form-border font-small" :span="18">
@@ -184,12 +186,12 @@
           </el-col>
         </el-row>
       </div>
-      <div style="margin-top:15px;text-align: center" v-show="orderReturnApply.status===0">
-        <el-button type="primary" size="small" @click="handleUpdateStatus(1)">确认退货</el-button>
-        <el-button type="danger" size="small" @click="handleUpdateStatus(3)">拒绝退货</el-button>
+      <div style="margin-top:15px;text-align: center" v-show="orderReturnApply.status===2">
+        <el-button type="primary" size="small" @click="handleUpdateStatus(3)">确认退货</el-button>
+        <el-button type="danger" size="small" @click="handleUpdateStatus(5)">拒绝退货</el-button>
       </div>
-      <div style="margin-top:15px;text-align: center" v-show="orderReturnApply.status===1">
-        <el-button type="primary" size="small" @click="handleUpdateStatus(2)">确认收货</el-button>
+      <div style="margin-top:15px;text-align: center" v-show="orderReturnApply.status===3">
+        <el-button type="primary" size="small" @click="handleUpdateStatus(4)">确认收货</el-button>
       </div>
     </el-card>
   </div>
@@ -276,11 +278,11 @@
     },
     filters: {
       formatStatus(status) {
-        if (status === 0) {
+        if (status === 2) {
           return "待处理";
-        } else if (status === 1) {
+        } else if (status === 3) {
           return "退货中";
-        } else if (status === 2) {
+        } else if (status === 4) {
           return "已完成";
         } else {
           return "已拒绝";
@@ -316,7 +318,7 @@
             this.proofPics = this.orderReturnApply.proofPics.split(",")
           }
           //退货中和完成
-          if(this.orderReturnApply.status===1||this.orderReturnApply.status===2){
+          if(this.orderReturnApply.status===3||this.orderReturnApply.status===4){
             this.updateStatusParam.returnAmount=this.orderReturnApply.returnAmount;
             this.updateStatusParam.companyAddressId=this.orderReturnApply.companyAddressId;
           }
@@ -325,7 +327,6 @@
       },
       getCompanyAddressList() {
         fetchList().then(response => {
-          console.log("getCompanyAddressList()")
           this.companyAddressList = response.data;
           for (let i = 0; i < this.companyAddressList.length; i++) {
             if (this.companyAddressList[i].receiveStatus === 1&&this.orderReturnApply.status===0) {

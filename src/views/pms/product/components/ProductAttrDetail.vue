@@ -49,7 +49,7 @@
           </el-table-column>
           <el-table-column
             label="销售价格"
-            width="80"
+            width="90"
             align="center">
             <template slot-scope="scope">
               <el-input v-model="scope.row.price"></el-input>
@@ -123,7 +123,6 @@
       <el-form-item label="规格参数：">
         <el-tabs v-model="activeHtmlName" type="card">
           <el-tab-pane label="电脑端详情" name="pc">
-            <!--<tinymce :width="595" :height="300" v-model="value.detailHtml"></tinymce>-->
             <WangEditor :width="595" :height="300" style="z-index: -1000" v-model="value.detailHtml"></WangEditor>
           </el-tab-pane>
         </el-tabs>

@@ -40,11 +40,11 @@
           </span>
         </el-form-item>
         <el-form-item>
-          <div id="vaptchaContainer" data-vid="5da947d5fc650e7dd83ca01c" style="width: 328px;height: 40px;">
+          <div id="vaptchaContainer" style="width: 328px;height: 36px;">
             <div class="vaptcha-init-main">
               <div class="vaptcha-init-loading">
-                <a href="https://www.vaptcha.com" target="_blank">
-                  <img src="https://cdn.vaptcha.com/vaptcha-loading.gif" />
+                <a href="/" target="_blank">
+                  <img src="https://r.vaptcha.com/public/img/vaptcha-loading.gif" />
                 </a>
                 <span class="vaptcha-text">Vaptcha启动中...</span>
               </div>
@@ -91,9 +91,10 @@
           username: 'admin',
           password: '',
         },
+        canLogin: false,
         loginRules: {
-          username: [{required: true, trigger: 'blur', validator: validateUsername}],
-          password: [{required: true, trigger: 'blur', validator: validatePass}]
+            username: [{required: true, trigger: 'blur', validator: validateUsername}],
+            password: [{required: true, trigger: 'blur', validator: validatePass}]
         },
         loading: false,
         pwdType: 'password',
@@ -107,17 +108,18 @@
     },
     methods: {
       initVaptcha () {
-          // eslint-disable-next-line no-undef
           vaptcha({
-              vid: '5da947d5fc650e7dd83ca01c',
+              vid: '5dd4fdc249f7cf7ffb8570b6',
               type: 'click',
               style: 'light',
+              scene: 0, // 场景值 默认0
+              offline_server: 'https://www.vaptchadowntime.com/dometime', //离线模式服务端地址
               container: '#vaptchaContainer'
-          }).then(function (vaptchaObj) {
+          }).then(vaptchaObj => {
               vaptchaObj.render()
-              vaptchaObj.listen('pass', function () {
+              vaptchaObj.listen('pass', () => {
+                this.canLogin = true
               })
-              this.loading = true
           })
       },
       showPwd() {
@@ -130,8 +132,8 @@
       handleLogin() {
         this.$refs.loginForm.validate(valid => {
           if (valid) {
-            this.loading = true
-            if(this.loading == true){
+            if(this.canLogin == true){
+              this.loading = true
               this.$store.dispatch('Login', this.loginForm).then(() => {
                   this.loading = false;
                   this.$router.push({path: '/'})
@@ -239,4 +241,35 @@
       bottom: 28px;
     }
   }
+
+  /*.vaptcha-init-main {
+    display: table;
+    width: 100%;
+    height: 100%;
+    background-color: #EEEEEE;
+  }
+  ​
+  .vaptcha-init-loading {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center
+  }
+  ​
+  .vaptcha-init-loading>a {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: none;
+  }
+  ​
+  .vaptcha-init-loading>a img {
+    vertical-align: middle
+  }
+  ​
+  .vaptcha-init-loading .vaptcha-text {
+    font-family: sans-serif;
+    font-size: 12px;
+    color: #CCCCCC;
+    vertical-align: middle
+  }*/
 </style>

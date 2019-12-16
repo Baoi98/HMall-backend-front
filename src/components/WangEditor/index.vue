@@ -78,7 +78,7 @@
                     'code', // 插入代码
                     'undo', // 撤销
                     'redo' // 重复
-                ],
+                ]
                 this.editor.customConfig.uploadImgHooks = {
                     fail: (xhr, editor, result) => {
                         // 插入图片失败回调
@@ -97,7 +97,7 @@
                         // 图片上传成功，插入图片的回调
                         insertImg(result.data)
                     }
-                },
+                }
                 this.editor.customConfig.onchange = (html) => {
                     this.info_ = html // 绑定当前逐渐地值
                     this.$emit('change', this.info_) // 将内容同步到父组件中

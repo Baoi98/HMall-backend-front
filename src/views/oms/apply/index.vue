@@ -149,19 +149,19 @@
   const defaultStatusOptions=[
     {
       label: '待处理',
-      value: 0
-    },
-    {
-      label: '退货中',
-      value: 1
-    },
-    {
-      label: '已完成',
       value: 2
     },
     {
-      label: '已拒绝',
+      label: '退货中',
       value: 3
+    },
+    {
+      label: '已完成',
+      value: 4
+    },
+    {
+      label: '已拒绝',
+      value: 5
     }
   ];
   export default {

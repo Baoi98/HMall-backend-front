@@ -1,7 +1,7 @@
 <template> 
   <div class="app-container">
     <el-card class="filter-container" shadow="never">
-      <div>
+      <div style="margin-top: 10px;">
         <i class="el-icon-search"></i>
         <span>筛选搜索</span>
         <el-button
@@ -18,8 +18,8 @@
           重置
         </el-button>
       </div>
-      <div style="margin-top: 15px">
-        <el-form :inline="true" :model="listQuery" size="small" label-width="140px">
+      <div style="margin-top: 50px">
+        <el-form :inline="true" :model="listQuery" size="small" label-width="100px">
           <el-form-item label="输入搜索：">
             <el-input style="width: 203px" v-model="listQuery.keyword" placeholder="商品名称"></el-input>
           </el-form-item>
@@ -53,7 +53,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="审核状态：">
+          <!--<el-form-item label="审核状态：">
             <el-select v-model="listQuery.verifyStatus" placeholder="全部" clearable>
               <el-option
                 v-for="item in verifyStatusOptions"
@@ -62,7 +62,7 @@
                 :value="item.value">
               </el-option>
             </el-select>
-          </el-form-item>
+          </el-form-item>-->
         </el-form>
       </div>
     </el-card>
@@ -109,7 +109,7 @@
         <el-table-column label="编号" width="100" align="center">
           <template slot-scope="scope">{{scope.row.id}}</template>
         </el-table-column>
-        <el-table-column label="商品图片" width="120" align="center">
+        <el-table-column label="商品图片" width="150" align="center">
           <template slot-scope="scope"><img style="height: 80px" :src="scope.row.pic"></template>
         </el-table-column>
         <el-table-column label="商品名称" align="center">
@@ -118,13 +118,13 @@
             <p>品牌：{{scope.row.brandName}}</p>
           </template>
         </el-table-column>
-        <el-table-column label="价格/货号" width="120" align="center">
+        <el-table-column label="价格/货号" width="150" align="center">
           <template slot-scope="scope">
             <p>价格：￥{{scope.row.price}}</p>
             <p>货号：{{scope.row.productSn}}</p>
           </template>
         </el-table-column>
-        <el-table-column label="标签" width="140" align="center">
+        <el-table-column label="标签" width="150" align="center">
           <template slot-scope="scope">
             <p>上架：
               <el-switch
@@ -163,7 +163,7 @@
         <el-table-column label="销量" width="100" align="center">
           <template slot-scope="scope">{{scope.row.sale}}</template>
         </el-table-column>
-        <el-table-column label="审核状态" width="100" align="center">
+        <!--<el-table-column label="审核状态" width="100" align="center">
           <template slot-scope="scope">
             <p>{{scope.row.verifyStatus | verifyStatusFilter}}</p>
             <p>
@@ -173,8 +173,8 @@
               </el-button>
             </p>
           </template>
-        </el-table-column>
-        <el-table-column label="操作" width="160" align="center">
+        </el-table-column>-->
+        <el-table-column label="操作" width="240" align="center">
           <template slot-scope="scope">
             <p>
               <el-button
@@ -185,8 +185,13 @@
                 size="mini"
                 @click="handleUpdateProduct(scope.$index, scope.row)">编辑
               </el-button>
+              <el-button
+                size="mini"
+                type="danger"
+                @click="handleDelete(scope.$index, scope.row)">删除
+              </el-button>
             </p>
-            <p>
+            <!--<p>
               <el-button
                 size="mini"
                 @click="handleShowLog(scope.$index, scope.row)">日志
@@ -196,7 +201,7 @@
                 type="danger"
                 @click="handleDelete(scope.$index, scope.row)">删除
               </el-button>
-            </p>
+            </p>-->
           </template>
         </el-table-column>
       </el-table>
@@ -243,7 +248,7 @@
         </el-table-column>
         <el-table-column
           label="销售价格"
-          width="80"
+          width="90"
           align="center">
           <template slot-scope="scope">
             <el-input v-model="scope.row.price"></el-input>
@@ -251,7 +256,7 @@
         </el-table-column>
         <el-table-column
           label="商品库存"
-          width="80"
+          width="90"
           align="center">
           <template slot-scope="scope">
             <el-input v-model="scope.row.stock"></el-input>
@@ -259,7 +264,7 @@
         </el-table-column>
         <el-table-column
           label="库存预警值"
-          width="100"
+          width="90"
           align="center">
           <template slot-scope="scope">
             <el-input v-model="scope.row.lowStock"></el-input>
@@ -271,6 +276,72 @@
         <el-button type="primary" @click="handleEditSkuConfirm">确 定</el-button>
       </span>
     </el-dialog>
+
+    <el-drawer
+      title="商品详情"
+      :visible.sync="table"
+      direction="ltr"
+      size="50%">
+      <div :data="gridData">
+        <div class="gray-box" style="height: 100%;position: absolute;">
+          <div class="gallery-wrapper" style="display:inline-block;">
+            <div class="gallery">
+              <div class="thumb">
+                <div class="big">
+                  <img :src="this.gridData.pic" :alt="this.gridData.productName" style="width: 350px;height: 350px;margin-left: 10px;">
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--右边-->
+          <div style="position: absolute; margin-left: 320px;margin-top: -330px;">
+            <div class="sku-custom-title">
+              <el-form>
+                <el-form-item label="商品货号" :label-width="formLabelWidth">
+                  <el-input class="elInput" autocomplete="off" v-text="this.gridData.productSn"></el-input>
+                </el-form-item>
+                <el-form-item label="商品名称" :label-width="formLabelWidth">
+                  <el-input class="elInput" autocomplete="off" v-text="this.gridData.name"></el-input>
+                </el-form-item>
+                <el-form-item label="商品品牌" :label-width="formLabelWidth">
+                  <el-input class="elInput" autocomplete="off" v-text="this.gridData.brandName"></el-input>
+                </el-form-item>
+                <el-form-item label="商品售价" :label-width="formLabelWidth">
+                  <el-input class="elInput" autocomplete="off" v-text="this.gridData.price"></el-input>
+                </el-form-item>
+                <el-form-item label="商品重量" :label-width="formLabelWidth">
+                  <el-input class="elInput" autocomplete="off" v-text="this.gridData.weight"></el-input>
+                </el-form-item>
+                <el-form-item label="商品介绍" :label-width="formLabelWidth">
+                  <el-input class="elInput" autocomplete="off" v-text="this.gridData.description"></el-input>
+                </el-form-item>
+                <el-form-item label="商品副标题" :label-width="formLabelWidth">
+                  <el-input class="elInput" autocomplete="off" v-text="this.gridData.subTitle"></el-input>
+                </el-form-item>
+                <el-form-item label="详细页标题" :label-width="formLabelWidth">
+                  <el-input class="elInput" autocomplete="off" v-text="this.gridData.brandName"></el-input>
+                </el-form-item>
+                <el-form-item label="详细页描述" :label-width="formLabelWidth">
+                  <el-input class="elInput" autocomplete="off" v-text="this.gridData.brandName"></el-input>
+                </el-form-item>
+                <el-form-item label="服务保证" :label-width="formLabelWidth">
+                  <el-input class="elInput" autocomplete="off" v-text="this.gridData.serviceIds === 1 ? '无忧退货' : '免费包邮'"></el-input>
+                </el-form-item>
+              </el-form>
+            </div>
+          </div>
+          <!--<div style="position: absolute;margin-top: 80px;width: 100%;height: 100%">
+            <div class="sku-custom-title">
+              <el-form>
+                <el-form-item label="详细描述" :label-width="formLabelWidth">
+                  <el-input style="width: 600px;" autocomplete="off" v-html="this.gridData.detailHtml"></el-input>
+                </el-form-item>
+              </el-form>
+            </div>
+          </div>-->
+        </div>
+      </div>
+    </el-drawer>
   </div>
 </template>
 <script>
@@ -289,7 +360,7 @@
   const defaultListQuery = {
     keyword: null,
     pageNum: 1,
-    pageSize: 5,
+    pageSize: 10,
     publishStatus: null,
     verifyStatus: null,
     productSn: null,
@@ -300,6 +371,23 @@
     name: "productList",
     data() {
       return {
+        //商品查看
+        table: false,
+        dialog: false,
+        loading: false,
+        gridData: [],
+        form: {
+            name: '',
+            region: '',
+            date1: '',
+            date2: '',
+            delivery: false,
+            type: [],
+            resource: '',
+            desc: ''
+        },
+        formLabelWidth: '150px',
+
         editSkuInfo:{
           dialogVisible:false,
           productId:null,
@@ -389,6 +477,13 @@
       }
     },
     methods: {
+      handleClose(done) {
+        this.$confirm('确认关闭？')
+            .then(_ => {
+                done();
+            })
+            .catch(_ => {});
+      },
       getProductSkuSp(row, index) {
         if (index === 0) {
           return row.sp1;
@@ -585,15 +680,18 @@
       handleUpdateProduct(index,row){
         this.$router.push({path:'/pms/updateProduct',query:{id:row.id}});
       },
-      handleShowProduct(index,row){
-        console.log("handleShowProduct",row);
+      handleShowProduct (index,row){
+        this.table = true;
+        this.gridData = row;
+        console.log(row)
+        //console.log("handleShowProduct",row);
       },
-      handleShowVerifyDetail(index,row){
+      /*handleShowVerifyDetail(index,row){
         console.log("handleShowVerifyDetail",row);
       },
       handleShowLog(index,row){
         console.log("handleShowLog",row);
-      },
+      },*/
       //更新商品上下架状态
       updatePublishStatus(publishStatus, ids) {
         let params = new URLSearchParams();
@@ -647,6 +745,11 @@
     }
   }
 </script>
-<style></style>
+<style>
+  .elInput{
+    width: 480px;
+    font-weight: 600;
+  }
+</style>
 
 
