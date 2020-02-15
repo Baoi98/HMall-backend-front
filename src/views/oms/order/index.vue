@@ -139,6 +139,8 @@
       </el-table>
     </div>
 
+    <!--<BMap v-model="logisticsDialogVisible"></BMap>-->
+
     <div class="pagination-container">
       <el-pagination
         background
@@ -167,13 +169,16 @@
         <el-button type="primary" @click="handleCloseOrderConfirm">确 定</el-button>
       </span>
     </el-dialog>
-    <logistics-dialog v-model="logisticsDialogVisible"></logistics-dialog>
+    <!--<logistics-dialog v-model="logisticsDialogVisible"></logistics-dialog>-->
+    <BMap v-if="logisticsDialogVisible" :address="this.end" style="position:absolute;margin-top: 80px;"></BMap>
   </div>
 </template>
 <script>
-  import {fetchList,closeOrder,deleteOrder} from '@/api/order'
+  import {fetchList,closeOrder,deleteOrder,orderTracking} from '@/api/order'
   import {formatDate} from '@/utils/date';
   import LogisticsDialog from '@/views/oms/order/components/logisticsDialog';
+  import BMap from '@/components/BMap';
+
   const defaultListQuery = {
     pageNum: 1,
     pageSize: 10,
@@ -185,7 +190,7 @@
   };
   export default {
     name: "orderList",
-    components:{LogisticsDialog},
+    components:{LogisticsDialog,BMap},
     data() {
       return {
         listQuery: Object.assign({}, defaultListQuery),
@@ -255,7 +260,8 @@
             value: 3
           }
         ],
-        logisticsDialogVisible:false
+        logisticsDialogVisible:false,
+        end: ''
       }
     },
     created() {
@@ -320,7 +326,19 @@
         let listItem = this.covertOrder(row);
         this.$router.push({path:'/oms/deliverOrderList',query:{list:[listItem]}})
       },
+      handleViewClose(){
+        this.logisticsDialogVisible=false;
+      },
       handleViewLogistics(index, row){
+        // this.logisticsDialogVisible=true;
+        let orderId = row.id;
+        orderTracking({orderId:orderId}).then(response => {
+          let map = response.data
+          console.log(map)
+          this.end = (map.detailAddress);
+          // this.end = (map.province == null ? '' : map.province + map.city == null ? '' : map.city + map.region == null ? '' : map.region + map.detailAddress == null ? '' : map.detailAddress)
+          console.log(map.province + map.city + map.region + map.detailAddress)
+        })
         this.logisticsDialogVisible=true;
       },
       handleDeleteOrder(index, row){

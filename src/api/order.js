@@ -61,3 +61,11 @@ export function updateOrderNote(params) {
     params:params
   })
 }
+//订单追踪
+export function orderTracking(params) {
+  return request({
+    url:'/order/order/orderTracking',
+    method:'get',
+    params:params
+  })
+}

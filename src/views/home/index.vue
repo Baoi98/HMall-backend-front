@@ -233,6 +233,11 @@
     created(){
       this.handleStatisticsCount();
       this.initOrderCountDate();
+      this.$notify({
+          title: '成功',
+          message: '登录成功，请继续操作',
+          type: 'success'
+      });
     },
     methods:{
       //初始化用户、商品、管理员数量统计

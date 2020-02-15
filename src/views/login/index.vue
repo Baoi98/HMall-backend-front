@@ -142,7 +142,10 @@
               })
             }
             else{
-                alert("123")
+              this.$notify.error({
+                  title: '错误',
+                  message: '请进行人机安全验证'
+              });
             }
           } else {
             console.log('参数验证不合法！');
