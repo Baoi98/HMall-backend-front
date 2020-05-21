@@ -3,7 +3,7 @@
     <el-upload
       :action = url
       :data = "dataObj"
-      accept="image/jpeg,image/png"
+      accept="image/jpeg,image/png,image/jpg"
       list-type="picture-card"
       :file-list="fileList"
       :on-success="handleUploadSuccess"

@@ -1,6 +1,5 @@
 import request from '@/utils/request'
 export function fetchList(param) {
-  console.log(param)
   return request({
     url:'/product/item/brand/list',
     method:'get',
@@ -54,3 +53,11 @@ export function updateBrand(id,data) {
   })
 }
 
+//品牌相关商品
+export function brandAboutItem(param) {
+  return request({
+    url:'/product/item/brand/aboutList',
+    method:'get',
+    params:param
+  })
+}

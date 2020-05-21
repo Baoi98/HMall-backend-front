@@ -133,10 +133,57 @@
         :total="total">
       </el-pagination>
     </div>
+
+    <el-drawer
+      title="品牌相关商品"
+      :visible.sync="table"
+      direction="ltr"
+      size="50%">
+        <div style="margin: auto">
+            <el-table :data="gridData">
+              <el-table-column label="编号" width="100" align="center">
+                <template slot-scope="scope">{{scope.row.id}}</template>
+              </el-table-column>
+              <el-table-column label="商品图片" width="150" align="center">
+                <template slot-scope="scope"><img style="height: 80px" :src="scope.row.pic"></template>
+              </el-table-column>
+              <el-table-column label="商品名称" align="center">
+                <template slot-scope="scope">
+                  <p>{{scope.row.name}}</p>
+                  <p>品牌：{{scope.row.brandName}}</p>
+                </template>
+              </el-table-column>
+              <el-table-column label="价格/货号" width="150" align="center">
+                <template slot-scope="scope">
+                  <p>价格：￥{{scope.row.price}}</p>
+                  <p>货号：{{scope.row.productSn}}</p>
+                </template>
+              </el-table-column>
+              <el-table-column label="排序" width="100" align="center">
+                <template slot-scope="scope">{{scope.row.sort}}</template>
+              </el-table-column>
+              <el-table-column label="销量" width="100" align="center">
+                <template slot-scope="scope">{{scope.row.sale}}</template>
+              </el-table-column>
+            </el-table>
+            <div class="pagination-container">
+              <el-pagination
+                background
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                layout="total, sizes,prev, pager, next,jumper"
+                :page-size="aboutItem.pageSize"
+                :page-sizes="[5,10,15]"
+                :current-page.sync="aboutItem.pageNum"
+                :total="aboutTotal">
+              </el-pagination>
+            </div>
+        </div>
+      </el-drawer>
   </div>
 </template>
 <script>
-  import {fetchList, updateShowStatus, updateFactoryStatus, deleteBrand} from '@/api/brand'
+  import {fetchList, updateShowStatus, updateFactoryStatus, deleteBrand, brandAboutItem} from '@/api/brand'
 
   export default {
     name: 'brandList',
@@ -165,7 +212,16 @@
         list: null,
         total: null,
         listLoading: true,
-        multipleSelection: []
+        multipleSelection: [],
+        // 相关商品
+        table: false,
+        gridData: [],
+        aboutItem: {
+            brandId: null,
+            pageNum: 1,
+            pageSize: 5,
+        },
+        aboutTotal: null
       }
     },
     created() {
@@ -194,7 +250,6 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          console.log(ids)
           let data = new URLSearchParams();
           data.append("ids", ids);
           deleteBrand(data).then(response => {
@@ -207,8 +262,20 @@
           });
         });
       },
+      // 品牌相关商品查询
       getProductList(index, row) {
-        console.log(index, row);
+        this.aboutItem.brandId = row.id
+        brandAboutItem(this.aboutItem).then(response => {
+          // 清空
+          this.gridData = []
+          console.log(response.data)
+          let data = response.data.list
+          for (let i = 0; i < data.length; i++){
+            this.gridData.push(data[i])
+          }
+          this.aboutTotal = response.data.total
+        })
+        this.table = true
       },
       handleFactoryStatusChange(index, row) {
         let param = {ids:row.id,factoryStatus:row.factoryStatus};

@@ -171,8 +171,8 @@
   </div>
 </template>
 <script>
-  import {fetchList,updateRecommendStatus,deleteHotProduct,createHotProduct,updateHotProductSort} from '@/api/hotProduct';
-  import {fetchList as fetchProductList} from '@/api/product';
+  import {fetchList,updateRecommendStatus,deleteHotProduct,createHotProduct,updateHotProductSort,addProductList} from '@/api/hotProduct';
+  // import {fetchList as fetchProductList} from '@/api/product';
 
   const defaultListQuery = {
     pageNum: 1,
@@ -365,7 +365,7 @@
             this.getList();
             this.$message({
               type: 'success',
-              message: '删除成功!'
+              message: '修改成功!'
             });
           });
         })
@@ -411,16 +411,16 @@
           let params=new URLSearchParams();
           params.append("ids",ids);
           deleteHotProduct(params).then(response=>{
-            this.getList();
             this.$message({
               type: 'success',
               message: '删除成功!'
             });
+            this.getList();
           });
         })
       },
       getDialogList(){
-        fetchProductList(this.dialogData.listQuery).then(response=>{
+        addProductList(this.dialogData.listQuery).then(response=>{
           this.dialogData.list=response.data.list;
           this.dialogData.total=response.data.total;
         })

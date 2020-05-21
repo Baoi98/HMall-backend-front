@@ -157,12 +157,6 @@ export const constantRouterMap = [
         hidden:true
       },
       {
-        path: 'orderSetting',
-        name: 'orderSetting',
-        component: () => import('@/views/oms/order/setting'),
-        meta: {title: '订单设置', icon: 'order-setting'}
-      },
-      {
         path: 'returnApply',
         name: 'returnApply',
         component: () => import('@/views/oms/apply/index'),
@@ -190,33 +184,6 @@ export const constantRouterMap = [
     name: 'sms',
     meta: {title: '营销', icon: 'sms'},
     children: [
-      /*{
-        path: 'flash',
-        name: 'flash',
-        component: () => import('@/views/sms/flash/index'),
-        meta: {title: '秒杀活动列表', icon: 'sms-flash'}
-      },
-      {
-        path: 'flashSession',
-        name: 'flashSession',
-        component: () => import('@/views/sms/flash/sessionList'),
-        meta: {title: '秒杀时间段列表'},
-        hidden:true
-      },
-      {
-        path: 'selectSession',
-        name: 'selectSession',
-        component: () => import('@/views/sms/flash/selectSessionList'),
-        meta: {title: '秒杀时间段选择'},
-        hidden:true
-      },
-      {
-        path: 'flashProductRelation',
-        name: 'flashProductRelation',
-        component: () => import('@/views/sms/flash/productRelationList'),
-        meta: {title: '秒杀商品列表'},
-        hidden:true
-      },*/
       {
         path: 'brand',
         name: 'homeBrand',
@@ -235,12 +202,6 @@ export const constantRouterMap = [
         component: () => import('@/views/sms/hot/index'),
         meta: {title: '人气推荐', icon: 'sms-hot'}
       },
-      /*{
-        path: 'subject',
-        name: 'homeSubject',
-        component: () => import('@/views/sms/subject/index'),
-        meta: {title: '专题推荐', icon: 'sms-subject'}
-      },*/
       {
         path: 'advertise',
         name: 'homeAdvertise',
@@ -263,28 +224,6 @@ export const constantRouterMap = [
       }
     ]
   },
-  /*{
-    path:'/sms',
-    component: Layout,
-    redirect: '/sms/coupon',
-    name: 'sms',
-    meta: {title: '权限', icon: 'sms'},
-    children: [
-      {
-        path: 'flash',
-        name: 'flash',
-        component: () => import('@/views/sms/flash/index'),
-        meta: {title: '秒杀活动列表', icon: 'sms-flash'}
-      },
-      {
-        path: 'flashSession',
-        name: 'flashSession',
-        component: () => import('@/views/sms/flash/sessionList'),
-        meta: {title: '秒杀时间段列表'},
-        hidden:true
-      }
-    ]
-  },*/
   {path: '*', redirect: '/404', hidden: true}
 ]
 

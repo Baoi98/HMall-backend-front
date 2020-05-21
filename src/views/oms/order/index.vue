@@ -23,8 +23,8 @@
           <el-form-item label="订单编号：">
             <el-input v-model="listQuery.orderSn" class="input-width" placeholder="订单编号"></el-input>
           </el-form-item>
-          <el-form-item label="收货人：">
-            <el-input v-model="listQuery.receiverKeyword" class="input-width" placeholder="收货人姓名/手机号码"></el-input>
+          <el-form-item label="下单用户：">
+            <el-input v-model="listQuery.receiverKeyword" class="input-width" placeholder="用户账户"></el-input>
           </el-form-item>
           <el-form-item label="提交时间：">
             <el-date-picker
@@ -38,15 +38,6 @@
           <el-form-item label="订单状态：">
             <el-select v-model="listQuery.status" class="input-width" placeholder="全部" clearable>
               <el-option v-for="item in statusOptions"
-                         :key="item.value"
-                         :label="item.label"
-                         :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="订单分类：">
-            <el-select v-model="listQuery.orderType" class="input-width" placeholder="全部" clearable>
-              <el-option v-for="item in orderTypeOptions"
                          :key="item.value"
                          :label="item.label"
                          :value="item.value">
@@ -185,7 +176,6 @@
     orderSn: null,
     receiverKeyword: null,
     status: null,
-    orderType: null,
     createTime: null,
   };
   export default {
@@ -224,16 +214,6 @@
           {
             label: '已关闭',
             value: 4
-          }
-        ],
-        orderTypeOptions: [
-          {
-            label: '正常订单',
-            value: 0
-          },
-          {
-            label: '秒杀订单',
-            value: 1
           }
         ],
         sourceTypeOptions: [
@@ -330,14 +310,10 @@
         this.logisticsDialogVisible=false;
       },
       handleViewLogistics(index, row){
-        // this.logisticsDialogVisible=true;
         let orderId = row.id;
         orderTracking({orderId:orderId}).then(response => {
           let map = response.data
-          console.log(map)
-          this.end = (map.detailAddress);
-          // this.end = (map.province == null ? '' : map.province + map.city == null ? '' : map.city + map.region == null ? '' : map.region + map.detailAddress == null ? '' : map.detailAddress)
-          console.log(map.province + map.city + map.region + map.detailAddress)
+          this.end = (map.province + map.city + map.region + map.detailAddress);
         })
         this.logisticsDialogVisible=true;
       },
@@ -423,6 +399,7 @@
       getList() {
         this.listLoading = true;
         fetchList(this.listQuery).then(response => {
+          console.log(response)
           this.listLoading = false;
           this.list = response.data.list;
           this.total = response.data.total;

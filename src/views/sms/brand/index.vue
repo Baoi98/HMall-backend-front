@@ -170,8 +170,8 @@
   </div>
 </template>
 <script>
-  import {fetchList,updateRecommendStatus,deleteHomeBrand,createHomeBrand,updateHomeBrandSort} from '@/api/homeBrand';
-  import {fetchList as fetchBrandList} from '@/api/brand';
+  import {fetchList,updateRecommendStatus,deleteHomeBrand,createHomeBrand,updateHomeBrandSort,addBrandList} from '@/api/homeBrand';
+  // import {fetchBrandList} from '@/api/brand';
 
   const defaultListQuery = {
     pageNum: 1,
@@ -341,11 +341,18 @@
           createHomeBrand(selectBrands).then(response=>{
             this.selectDialogVisible=false;
             this.dialogData.multipleSelection=[];
+            if (response.status == 101) {
+              this.$message({
+                  type: 'warning',
+                  message: response.message
+              });
+            } else {
+              this.$message({
+                  type: 'success',
+                  message: response.message
+              });
+            }
             this.getList();
-            this.$message({
-              type: 'success',
-              message: '添加成功!'
-            });
           });
         });
       },
@@ -388,11 +395,18 @@
           params.append("ids",ids);
           params.append("recommendStatus",status);
           updateRecommendStatus(params).then(response=>{
+            if (response.status == 101) {
+                this.$message({
+                    type: 'warning',
+                    message: response.message
+                });
+            } else {
+                this.$message({
+                    type: 'success',
+                    message: response.message
+                });
+            }
             this.getList();
-            this.$message({
-              type: 'success',
-              message: '修改成功!'
-            });
           });
         }).catch(() => {
           this.$message({
@@ -411,16 +425,16 @@
           let params=new URLSearchParams();
           params.append("ids",ids);
           deleteHomeBrand(params).then(response=>{
-            this.getList();
             this.$message({
               type: 'success',
-              message: '删成功!'
+              message: '删除成功!'
             });
+            this.getList();
           });
         })
       },
       getDialogList(){
-        fetchBrandList(this.dialogData.listQuery).then(response=>{
+        addBrandList(this.dialogData.listQuery).then(response=>{
           this.dialogData.list=response.data.list;
           this.dialogData.total=response.data.total;
         })

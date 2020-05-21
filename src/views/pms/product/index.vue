@@ -53,16 +53,6 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <!--<el-form-item label="审核状态：">
-            <el-select v-model="listQuery.verifyStatus" placeholder="全部" clearable>
-              <el-option
-                v-for="item in verifyStatusOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>-->
         </el-form>
       </div>
     </el-card>
@@ -163,17 +153,6 @@
         <el-table-column label="销量" width="100" align="center">
           <template slot-scope="scope">{{scope.row.sale}}</template>
         </el-table-column>
-        <!--<el-table-column label="审核状态" width="100" align="center">
-          <template slot-scope="scope">
-            <p>{{scope.row.verifyStatus | verifyStatusFilter}}</p>
-            <p>
-              <el-button
-                type="text"
-                @click="handleShowVerifyDetail(scope.$index, scope.row)">审核详情
-              </el-button>
-            </p>
-          </template>
-        </el-table-column>-->
         <el-table-column label="操作" width="240" align="center">
           <template slot-scope="scope">
             <p>
@@ -191,17 +170,6 @@
                 @click="handleDelete(scope.$index, scope.row)">删除
               </el-button>
             </p>
-            <!--<p>
-              <el-button
-                size="mini"
-                @click="handleShowLog(scope.$index, scope.row)">日志
-              </el-button>
-              <el-button
-                size="mini"
-                type="danger"
-                @click="handleDelete(scope.$index, scope.row)">删除
-              </el-button>
-            </p>-->
           </template>
         </el-table-column>
       </el-table>
@@ -325,20 +293,11 @@
                   <el-input class="elInput" autocomplete="off" v-text="this.gridData.brandName"></el-input>
                 </el-form-item>
                 <el-form-item label="服务保证" :label-width="formLabelWidth">
-                  <el-input class="elInput" autocomplete="off" v-text="this.gridData.serviceIds === 1 ? '无忧退货' : '免费包邮'"></el-input>
+                  <el-input class="elInput" autocomplete="off" v-text="this.gridData.serviceIds === '1' ? '无忧退货' : '免费包邮'"></el-input>
                 </el-form-item>
               </el-form>
             </div>
           </div>
-          <!--<div style="position: absolute;margin-top: 80px;width: 100%;height: 100%">
-            <div class="sku-custom-title">
-              <el-form>
-                <el-form-item label="详细描述" :label-width="formLabelWidth">
-                  <el-input style="width: 600px;" autocomplete="off" v-html="this.gridData.detailHtml"></el-input>
-                </el-form-item>
-              </el-form>
-            </div>
-          </div>-->
         </div>
       </div>
     </el-drawer>
@@ -683,15 +642,8 @@
       handleShowProduct (index,row){
         this.table = true;
         this.gridData = row;
-        console.log(row)
-        //console.log("handleShowProduct",row);
+        console.log("handleShowProduct",row);
       },
-      /*handleShowVerifyDetail(index,row){
-        console.log("handleShowVerifyDetail",row);
-      },
-      handleShowLog(index,row){
-        console.log("handleShowLog",row);
-      },*/
       //更新商品上下架状态
       updatePublishStatus(publishStatus, ids) {
         let params = new URLSearchParams();
@@ -739,8 +691,8 @@
             type: 'success',
             duration: 1000
           });
+          this.getList();
         });
-        this.getList();
       }
     }
   }

@@ -189,7 +189,7 @@
     filters:{
       formatTime(time) {
         if(time==null||time===''){
-          return 'N/A';
+          return '';
         }
         let date = new Date(time);
         return formatDate(date, 'yyyy-MM-dd hh:mm:ss')
@@ -242,6 +242,7 @@
             }
             params.append("ids",ids);
             deleteApply(params).then(response=>{
+              console.log(response)
               this.getList();
               this.$message({
                 type: 'success',
@@ -264,7 +265,9 @@
         this.listLoading=true;
         fetchList(this.listQuery).then(response => {
           this.listLoading = false;
+
           this.list = response.data.list;
+          console.log(this.list)
           this.total = response.data.total;
         });
       }

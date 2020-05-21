@@ -38,3 +38,11 @@ export function updateHomeBrandSort(params) {
     params:params
   })
 }
+
+export function addBrandList(params) {
+  return request({
+    url:'/backend/admin/home/brand/add/list',
+    method:'get',
+    params:params
+  })
+}

@@ -1,13 +1,6 @@
 <template>
   <div style="margin-top: 50px">
     <el-form :model="value" ref="productSaleForm" label-width="120px" style="width: 800px;margin-left: 150px;" size="small">
-      <!--<el-form-item label="预告商品：">
-        <el-switch
-          v-model="value.previewStatus"
-          :active-value="1"
-          :inactive-value="0">
-        </el-switch>
-      </el-form-item>-->
       <el-form-item label="商品上架：">
         <el-switch
           v-model="value.publishStatus"
@@ -30,7 +23,7 @@
         </el-switch>
       </el-form-item>
       <el-form-item label="服务保证：">
-        <el-radio-group v-model="selectServiceList">
+       <el-radio-group v-model="value.serviceIds">
           <el-radio :label="1">无忧退货</el-radio>
           <el-radio :label="2">免费包邮</el-radio>
         </el-radio-group>
@@ -41,24 +34,6 @@
       <el-form-item label="详细页描述：">
         <el-input v-model="value.detailDesc"></el-input>
       </el-form-item>
-      <el-form-item label="商品关键字：">
-        <el-input v-model="value.keywords"></el-input>
-      </el-form-item>
-      <el-form-item label="商品备注：">
-        <el-input v-model="value.note" type="textarea" :autoSize="true"></el-input>
-      </el-form-item>
-      <!--<el-form-item label="选择优惠方式：">
-        <el-radio-group v-model="value.promotionType" size="small">
-          <el-radio-button :label="0">无优惠</el-radio-button>
-          <el-radio-button :label="1">特惠促销</el-radio-button>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item v-show="value.promotionType===1">
-        <div class="littleMargin">
-          促销价格：
-          <el-input style="width: 220px" v-model="value.promotionPrice" placeholder="输入促销价格"></el-input>
-        </div>
-      </el-form-item>-->
       <el-form-item style="text-align: center">
         <el-button size="medium" @click="handlePrev">上一步，填写商品信息</el-button>
         <el-button type="primary" size="medium" @click="handleNext">下一步，填写商品属性</el-button>
@@ -68,7 +43,6 @@
 </template>
 
 <script>
-  import {fetchList as fetchMemberLevelList} from '@/api/memberLevel'
 
   export default {
     name: "ProductSaleDetail",
@@ -87,21 +61,21 @@
             return time.getTime() < Date.now();
           }
         },
-        selectServiceList: 3
+        selectServiceList: 2
       }
     },
     created() {
       if (this.isEdit) {
-        // this.handleEditCreated();
+          // this.handleEditCreated();
       } else {
-        /*fetchMemberLevelList({defaultStatus: 0}).then(response => {
-          let memberPriceList = [];
-          for (let i = 0; i < response.data.length; i++) {
-            let item = response.data[i];
-            memberPriceList.push({memberLevelId: item.id, memberLevelName: item.name})
-          }
-          this.value.memberPriceList = memberPriceList;
-        });*/
+          /*fetchMemberLevelList({defaultStatus: 0}).then(response => {
+              let memberPriceList = [];
+              for (let i = 0; i < response.data.length; i++) {
+                  let item = response.data[i];
+                  memberPriceList.push({memberLevelId: item.id, memberLevelName: item.name})
+              }
+              this.value.memberPriceList = memberPriceList;
+          });*/
       }
     },
     computed: {
@@ -135,7 +109,6 @@
     methods: {
       handleEditCreated() {
         let ids = this.value.serviceIds.split(',');
-        console.log('handleEditCreated', ids);
         for (let i = 0; i < ids.length; i++) {
           this.selectServiceList.push(Number(ids[i]));
         }
@@ -155,4 +128,3 @@
     margin-top: 10px;
   }
 </style>
--1+11

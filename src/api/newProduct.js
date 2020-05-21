@@ -38,3 +38,11 @@ export function updateNewProductSort(params) {
     params:params
   })
 }
+
+export function addProductList(params) {
+  return request({
+    url:'/backend/admin/home/newProduct/add/list',
+    method:'get',
+    params:params
+  })
+}

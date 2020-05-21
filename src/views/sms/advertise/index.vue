@@ -88,7 +88,7 @@
         <el-table-column label="广告图片" align="center">
           <template slot-scope="scope"><img style="height: 80px" :src="scope.row.pic"></template>
         </el-table-column>
-        <el-table-column label="上线/下线" width="120" align="center">
+        <el-table-column label="上线/下线" width="160" align="center">
           <template slot-scope="scope">
             <el-switch
               @change="handleUpdateStatus(scope.$index, scope.row)"
@@ -98,9 +98,9 @@
             </el-switch>
           </template>
         </el-table-column>
-        <el-table-column label="点击次数" width="120" align="center">
+        <!--<el-table-column label="点击次数" width="120" align="center">
           <template slot-scope="scope">{{scope.row.clickCount}}</template>
-        </el-table-column>
+        </el-table-column>-->
         <el-table-column label="操作" width="240" align="center">
           <template slot-scope="scope">
             <el-button size="mini"

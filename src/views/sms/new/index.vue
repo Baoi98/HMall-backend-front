@@ -171,8 +171,8 @@
   </div>
 </template>
 <script>
-  import {fetchList,updateRecommendStatus,deleteNewProduct,createNewProduct,updateNewProductSort} from '@/api/newProduct';
-  import {fetchList as fetchProductList} from '@/api/product';
+  import {fetchList,updateRecommendStatus,deleteNewProduct,createNewProduct,updateNewProductSort,addProductList} from '@/api/newProduct';
+  // import {fetchList as fetchProductList} from '@/api/product';
 
   const defaultListQuery = {
     pageNum: 1,
@@ -420,7 +420,7 @@
         })
       },
       getDialogList(){
-        fetchProductList(this.dialogData.listQuery).then(response=>{
+        addProductList(this.dialogData.listQuery).then(response=>{
           this.dialogData.list=response.data.list;
           this.dialogData.total=response.data.total;
         })

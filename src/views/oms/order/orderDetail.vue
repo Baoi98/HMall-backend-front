@@ -21,7 +21,7 @@
         </div>
         <div class="operate-button-container" v-show="order.status===1">
           <el-button size="mini" @click="showUpdateReceiverDialog">修改收货人信息</el-button>
-          <el-button size="mini">取消订单</el-button>
+          <!--<el-button size="mini">取消订单</el-button>-->
           <el-button size="mini" @click="showMarkOrderDialog">备注订单</el-button>
         </div>
         <div class="operate-button-container" v-show="order.status===2||order.status===3">
@@ -39,41 +39,26 @@
       </div>
       <div class="table-layout">
         <el-row>
-          <el-col :span="4" class="table-cell-title">订单编号</el-col>
-          <el-col :span="4" class="table-cell-title">发货单流水号</el-col>
+          <el-col :span="8" class="table-cell-title">订单编号</el-col>
           <el-col :span="4" class="table-cell-title">用户账号</el-col>
           <el-col :span="4" class="table-cell-title">支付方式</el-col>
           <el-col :span="4" class="table-cell-title">订单来源</el-col>
           <el-col :span="4" class="table-cell-title">订单类型</el-col>
         </el-row>
         <el-row>
-          <el-col :span="4" class="table-cell">{{order.orderSn}}</el-col>
-          <el-col :span="4" class="table-cell">暂无</el-col>
+          <el-col :span="8" class="table-cell">{{order.orderSn}}</el-col>
           <el-col :span="4" class="table-cell">{{order.memberUsername}}</el-col>
           <el-col :span="4" class="table-cell">{{order.payType | formatPayType}}</el-col>
           <el-col :span="4" class="table-cell">{{order.sourceType | formatSourceType}}</el-col>
           <el-col :span="4" class="table-cell">{{order.orderType | formatOrderType}}</el-col>
         </el-row>
         <el-row>
-          <el-col :span="4" class="table-cell-title">配送方式</el-col>
           <el-col :span="4" class="table-cell-title">物流单号</el-col>
-          <el-col :span="4" class="table-cell-title">自动确认收货时间</el-col>
-          <el-col :span="4" class="table-cell-title">活动信息</el-col>
+          <el-col :span="4" class="table-cell-title">配送方式</el-col>
         </el-row>
         <el-row>
-          <el-col :span="4" class="table-cell">{{order.deliveryCompany | formatNull}}</el-col>
           <el-col :span="4" class="table-cell">{{order.deliverySn | formatNull}}</el-col>
-          <el-col :span="4" class="table-cell">{{order.autoConfirmDay}}天</el-col>
-          <el-col :span="4" class="table-cell">
-            <el-popover
-              placement="top-start"
-              title="活动信息"
-              width="200"
-              trigger="hover"
-              :content="order.promotionInfo">
-              <span slot="reference">{{order.promotionInfo | formatLongText}}</span>
-            </el-popover>
-          </el-col>
+          <el-col :span="4" class="table-cell">{{order.deliveryCompany | formatNull}}</el-col>
         </el-row>
       </div>
       <div style="margin-top: 20px">
@@ -121,7 +106,9 @@
         </el-table-column>
         <el-table-column label="属性" width="120" align="center">
           <template slot-scope="scope">
-            {{scope.row.productAttr | formatProductAttr}}
+            {{scope.row.sp1 == null ? '' : scope.row.sp1}}
+            {{scope.row.sp2 == null ? '' : scope.row.sp2}}
+            {{scope.row.sp3 == null ? '' : scope.row.sp3}}
           </template>
         </el-table-column>
         <el-table-column label="数量" width="120" align="center">
@@ -290,14 +277,20 @@
         <el-button type="primary" @click="handleMarkOrder">确 定</el-button>
       </span>
     </el-dialog>
-    <logistics-dialog v-model="logisticsDialogVisible"></logistics-dialog>
+
+    <BMap v-if="logisticsDialogVisible" :address="this.end" style="margin-top: 40px;width: 100%"></BMap>
+
   </div>
+
+
 </template>
 <script>
-  import {getOrderDetail,updateReceiverInfo,updateMoneyInfo,closeOrder,updateOrderNote,deleteOrder} from '@/api/order';
+  import {getOrderDetail,updateReceiverInfo,updateMoneyInfo,closeOrder,updateOrderNote,deleteOrder,orderTracking} from '@/api/order';
   import LogisticsDialog from '@/views/oms/order/components/logisticsDialog';
   import {formatDate} from '@/utils/date';
   import VDistpicker from 'v-distpicker';
+  import BMap from '@/components/BMap';
+
   const defaultReceiverInfo = {
     orderId:null,
     receiverName:null,
@@ -311,7 +304,7 @@
   };
   export default {
     name: 'orderDetail',
-    components: { VDistpicker, LogisticsDialog},
+    components: { VDistpicker, LogisticsDialog, BMap},
     data() {
       return {
         id: null,
@@ -326,12 +319,14 @@
         closeInfo:{note:null,id:null},
         markOrderDialogVisible:false,
         markInfo:{note:null},
-        logisticsDialogVisible:false
+        logisticsDialogVisible:false,
+        end: ''
       }
     },
     created() {
       this.id = this.list = this.$route.query.id;
       getOrderDetail(this.id).then(response => {
+        console.log(response.data)
         this.order = response.data;
       });
     },
@@ -385,7 +380,7 @@
         return str;
       },
       formatStatus(value) {
-        if (value === 1) {
+        /*if (value === 1) {
           return '待发货';
         } else if (value === 2) {
           return '已发货';
@@ -397,7 +392,22 @@
           return '无效订单';
         } else {
           return '待付款';
-        }
+        }*/
+          if (value === 0) {
+              return '待付款';
+          } else if (value === 1) {
+              return '待发货';
+          } else if (value === 2) {
+              return '已发货';
+          } else if (value === 3) {
+              return '已收货';
+          } else if (value === 4) {
+              return '已评价';
+          } else if (value === 5) {
+              return '已关闭';
+          } else {
+              return '待付款';
+          }
       },
       formatPayStatus(value) {
         if (value === 0) {
@@ -445,6 +455,7 @@
         return formatDate(date, 'yyyy-MM-dd hh:mm:ss')
       },
       formatStepStatus(value) {
+        console.log(value)
         if (value === 1) {
           //待发货
           return 2;
@@ -452,9 +463,15 @@
           //已发货
           return 3;
         } else if (value === 3) {
-          //已完成
+          //确认收货
           return 4;
-        }else {
+        } else if (value === 4) {
+            //完成评价
+            return 5;
+        } else if (value === 5) {
+            //关闭订单
+            return 0;
+        } else {
           //待付款、已关闭、无限订单
           return 1;
         }
@@ -593,6 +610,11 @@
         })
       },
       showLogisticsDialog(){
+        let orderId = this.id;
+        orderTracking({orderId:orderId}).then(response => {
+            let map = response.data
+            this.end = (map.province + map.city + map.region + map.detailAddress);
+        })
         this.logisticsDialogVisible=true;
       }
     }

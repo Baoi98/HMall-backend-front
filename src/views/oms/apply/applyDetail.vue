@@ -15,17 +15,17 @@
         <el-table-column label="商品名称" align="center">
           <template slot-scope="scope">
             <span class="font-small">{{scope.row.productName}}</span><br>
-            <span class="font-small">品牌：{{scope.row.productBrand}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="价格/货号" width="180" align="center">
+        <el-table-column label="价格" width="180" align="center">
           <template slot-scope="scope">
-            <span class="font-small">价格：￥{{scope.row.productRealPrice}}</span><br>
-            <span class="font-small">货号：NO.{{scope.row.productId}}</span>
+            <span class="font-small">￥{{scope.row.productRealPrice}}</span><br>
           </template>
         </el-table-column>
-        <el-table-column label="属性" width="180" align="center">
-          <template slot-scope="scope">{{scope.row.productAttr}}</template>
+        <el-table-column label="品牌" width="180" align="center">
+          <template slot-scope="scope">
+            <span class="font-small">{{scope.row.productBrand}}</span>
+          </template>
         </el-table-column>
         <el-table-column label="数量" width="100" align="center">
           <template slot-scope="scope">{{scope.row.productCount}}</template>
@@ -86,16 +86,16 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col class="form-border form-left-bg font-small" :span="6" style="height:300px;line-height:80px">问题描述
+          <el-col class="form-border form-left-bg font-small" :span="6" style="height:600px;line-height:80px">问题描述
           </el-col>
-          <el-col class="form-border font-small" :span="18" style="height:300px">
+          <el-col class="form-border font-small" :span="18" style="height:600px">
             <span v-html="orderReturnApply.description"></span>
           </el-col>
         </el-row>
       </div>
       <div class="form-container-border">
         <el-row>
-          <el-col class="form-border form-left-bg font-small" :span="6">订单金额</el-col>
+          <el-col class="form-border form-left-bg font-small" :span="6">退款金额</el-col>
           <el-col class="form-border font-small" :span="18">￥{{totalAmount}}</el-col>
         </el-row>
         <el-row>
@@ -109,36 +109,41 @@
         </el-row>
         <div v-show="orderReturnApply.status!==3">
         <el-row>
-          <el-col class="form-border form-left-bg font-small" :span="6" style="height:52px;line-height:32px">选择收货点
+          <el-col class="form-border form-left-bg font-small" :span="6" style="height:52px;line-height:32px">公司收货点
           </el-col>
           <el-col class="form-border font-small" style="height:52px" :span="18">
-            <el-select size="small"
-                       style="width:200px"
-                       :disabled="orderReturnApply.status!==2"
-                       v-model="updateStatusParam.companyAddressId">
-              <el-option v-for="address in companyAddressList"
-                         :key="address.id"
-                         :value="address.id"
-                         :label="address.addressName">
-              </el-option>
-            </el-select>
+            {{orderReturnApply.companyAddress.addressName}}
           </el-col>
         </el-row>
         <el-row>
           <el-col class="form-border form-left-bg font-small" :span="6">收货人姓名</el-col>
-          <el-col class="form-border font-small" :span="18">{{currentAddress.name}}</el-col>
+          <el-col class="form-border font-small" :span="18">
+            <!--{{currentAddress.name}}-->
+            {{orderReturnApply.companyAddress.name}}
+          </el-col>
         </el-row>
         <el-row>
           <el-col class="form-border form-left-bg font-small" :span="6">所在区域</el-col>
-          <el-col class="form-border font-small" :span="18">{{currentAddress | formatRegion}}</el-col>
+          <el-col class="form-border font-small" :span="18">
+            <!--{{currentAddress | formatRegion}}-->
+            {{orderReturnApply.companyAddress.province}}
+            {{orderReturnApply.companyAddress.city}}
+            {{orderReturnApply.companyAddress.region}}
+          </el-col>
         </el-row>
         <el-row>
           <el-col class="form-border form-left-bg font-small" :span="6">详细地址</el-col>
-          <el-col class="form-border font-small" :span="18">{{currentAddress.detailAddress}}</el-col>
+          <el-col class="form-border font-small" :span="18">
+            <!--{{currentAddress.detailAddress}}-->
+            {{orderReturnApply.companyAddress.detailAddress}}
+          </el-col>
         </el-row>
         <el-row>
           <el-col class="form-border form-left-bg font-small" :span="6">联系电话</el-col>
-          <el-col class="form-border font-small" :span="18">{{currentAddress.phone}}</el-col>
+          <el-col class="form-border font-small" :span="18">
+            <!--{{currentAddress.phone}}-->
+            {{orderReturnApply.companyAddress.phone}}
+          </el-col>
         </el-row>
         </div>
       </div>
@@ -153,7 +158,9 @@
         </el-row>
         <el-row>
           <el-col class="form-border form-left-bg font-small" :span="6">处理备注</el-col>
-          <el-col class="form-border font-small" :span="18">{{orderReturnApply.handleNote}}</el-col>
+          <el-col class="form-border font-small" :span="18">
+            {{orderReturnApply.handleNote == null ? ' ' : orderReturnApply.handleNote}}
+          </el-col>
         </el-row>
       </div>
       <div class="form-container-border" v-show="orderReturnApply.status===4">
@@ -167,22 +174,26 @@
         </el-row>
         <el-row>
           <el-col class="form-border form-left-bg font-small" :span="6">收货备注</el-col>
-          <el-col class="form-border font-small" :span="18">{{orderReturnApply.receiveNote}}</el-col>
-        </el-row>
-      </div>
-      <div class="form-container-border" v-show="orderReturnApply.status===4">
-        <el-row>
-          <el-col class="form-border form-left-bg font-small" :span="6" style="height:52px;line-height:32px">处理备注</el-col>
           <el-col class="form-border font-small" :span="18">
-            <el-input  size="small" v-model="updateStatusParam.handleNote" style="width:200px;margin-left: 10px"></el-input>
+            <span>
+              {{orderReturnApply.receiveNote == null ? ' ' : orderReturnApply.receiveNote}}
+            </span>
           </el-col>
         </el-row>
       </div>
-      <div class="form-container-border" v-show="orderReturnApply.status===4">
+      <div class="form-container-border" v-show="orderReturnApply.status===2">
+        <el-row>
+          <el-col class="form-border form-left-bg font-small" :span="6" style="height:52px;line-height:32px">处理备注</el-col>
+          <el-col class="form-border font-small" :span="18">
+            <el-input  size="small" v-model="updateStatusParam.handleNote" style="width:600px;margin-left: 10px"></el-input>
+          </el-col>
+        </el-row>
+      </div>
+      <div class="form-container-border" v-show="orderReturnApply.status===3">
         <el-row>
           <el-col class="form-border form-left-bg font-small" :span="6" style="height:52px;line-height:32px">收货备注</el-col>
           <el-col class="form-border font-small" :span="18">
-            <el-input  size="small" v-model="updateStatusParam.receiveNote" style="width:200px;margin-left: 10px"></el-input>
+            <el-input  size="small" v-model="updateStatusParam.receiveNote" style="width:600px;margin-left: 10px"></el-input>
           </el-col>
         </el-row>
       </div>
@@ -248,7 +259,6 @@
         productList: null,
         proofPics: null,
         updateStatusParam: Object.assign({}, defaultUpdateStatusParam),
-        companyAddressList: null
       }
     },
     created() {
@@ -263,18 +273,6 @@
           return 0;
         }
       },
-      currentAddress() {
-        console.log("currentAddress()");
-        let id = this.updateStatusParam.companyAddressId;
-        if(this.companyAddressList==null)return {};
-        for (let i = 0; i < this.companyAddressList.length; i++) {
-          let address = this.companyAddressList[i];
-          if (address.id === id) {
-            return address;
-          }
-        }
-        return null;
-      }
     },
     filters: {
       formatStatus(status) {
@@ -290,7 +288,7 @@
       },
       formatTime(time) {
         if (time == null || time === '') {
-          return 'N/A';
+          return '';
         }
         let date = new Date(time);
         return formatDate(date, 'yyyy-MM-dd hh:mm:ss')
@@ -310,8 +308,8 @@
       },
       getDetail() {
         getApplyDetail(this.id).then(response => {
-          console.log("getDetail")
           this.orderReturnApply = response.data;
+          console.log(this.orderReturnApply)
           this.productList = [];
           this.productList.push(this.orderReturnApply);
           if (this.orderReturnApply.proofPics != null) {
@@ -321,17 +319,6 @@
           if(this.orderReturnApply.status===3||this.orderReturnApply.status===4){
             this.updateStatusParam.returnAmount=this.orderReturnApply.returnAmount;
             this.updateStatusParam.companyAddressId=this.orderReturnApply.companyAddressId;
-          }
-          this.getCompanyAddressList();
-        });
-      },
-      getCompanyAddressList() {
-        fetchList().then(response => {
-          this.companyAddressList = response.data;
-          for (let i = 0; i < this.companyAddressList.length; i++) {
-            if (this.companyAddressList[i].receiveStatus === 1&&this.orderReturnApply.status===0) {
-              this.updateStatusParam.companyAddressId = this.companyAddressList[i].id;
-            }
           }
         });
       },

@@ -363,7 +363,7 @@
             type: 'warning',
             duration: 1000
           });
-          return
+          return;
         }
         if (options.indexOf(this.addProductAttrValue) !== -1) {
           this.$message({
